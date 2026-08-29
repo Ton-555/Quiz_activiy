@@ -41,11 +41,7 @@
     body {
       font-family: 'Prompt', sans-serif;
       -webkit-tap-highlight-color: transparent;
-      background-image: url('frame002.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+      background-color: #ffffff;
     }
 
     /* Animation เฟดเข้าทั่วไป (หน้าคำถาม) 0.45s */
@@ -124,6 +120,13 @@
 </head>
 
 <body class="min-h-screen text-slate-800 flex flex-col justify-between selection:bg-indigo-200">
+
+  <!-- Responsive Background Image (Art Direction) -->
+  <picture class="fixed inset-0 w-full h-full z-0 pointer-events-none">
+    <source media="(min-width: 1024px) and (orientation: landscape)" srcset="frame001.jpg">
+    <source media="(min-width: 768px) and (orientation: landscape)" srcset="frame003.jpg">
+    <img src="frame002.jpg" alt="Background" class="w-full h-full object-cover" loading="eager">
+  </picture>
 
   <!-- Header Bar -->
   <header class="relative z-10 w-full max-w-xl mx-auto px-4 py-4 flex items-center justify-center">
