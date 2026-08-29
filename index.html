@@ -13,7 +13,7 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- html2canvas Library สำหรับสร้างภาพดาวน์โหลด -->
+  <!-- html2canvas Library สำหรับสร้างภาพดาวน์โหลด (รองรับ file:// และ web) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 
@@ -48,11 +48,18 @@
       background-attachment: fixed;
     }
 
-    /* Animation เฟดเข้า */
+    /* Animation เฟดเข้าทั่วไป (หน้าคำถาม) 0.45s */
     .fade-enter {
       opacity: 0;
       transform: translateY(10px) scale(0.98);
-      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Animation เฟดเข้าเฉพาะการ์ดต้อนรับ 1s */
+    .intro-fade-enter {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+      animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes fadeIn {
@@ -61,6 +68,13 @@
         transform: translateY(0) scale(1);
       }
     }
+
+    /* โค้ดสีหลักหน้าคำถาม #66854E */
+    .bg-quiz-green { background-color: #66854E; }
+    .text-quiz-green { color: #66854E; }
+    .border-quiz-green { border-color: #66854E; }
+    .bg-quiz-green-light { background-color: rgba(102, 133, 78, 0.12); }
+    .ring-quiz-green { --tw-ring-color: rgba(102, 133, 78, 0.3); }
 
     /* สไตล์การ์ดตัวเลือก */
     .option-card:active {
@@ -119,27 +133,18 @@
   <!-- Main Content Container -->
   <main class="relative z-10 w-full max-w-md mx-auto px-4 flex-1 flex flex-col justify-center py-2">
 
-    <!-- SCREEN 1: Welcome Screen -->
+    <!-- SCREEN 1: Welcome / Intro Sequence Screen -->
     <div id="screen-welcome"
-      class="fade-enter bg-white/80 backdrop-blur-xl border border-white/60 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 text-center">
-      <div
-        class="inline-flex items-center justify-center px-6 py-4 rounded-2xl bg-indigo-50 border border-indigo-100 mb-5 text-sm font-medium text-indigo-600 shadow-inner">
-        รูปภาพ
+      class="intro-fade-enter bg-white/80 backdrop-blur-xl border border-white/60 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 text-center flex flex-col justify-between min-h-[280px]">
+      <div class="my-auto py-6">
+        <h1 id="intro-title" class="text-2xl sm:text-3xl font-bold text-slate-900 leading-snug">
+          อยากเป็นคนโปรดแต่ดันโสดซะงั้น
+        </h1>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mb-3">
-        ค้นหาพลังงานและตัวตนที่แท้จริงของคุณ
-      </h1>
-      <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6 font-light">
-        ตอบคำถามสั้นๆ เพื่อวิเคราะห์ <span class="font-medium text-indigo-600">Lifestyle Archetype</span>
-        พร้อมรับการ์ดสรุปผลลัพธ์ฉบับพิเศษสำหรับคุณ
-      </p>
 
-      <!-- พื้นที่เว้นวรรคเพื่อรักษาสัดส่วนของหน้าจอให้สวยงามเหมือนเดิม -->
-      <div class="h-12 sm:h-14" aria-hidden="true"></div>
-
-      <button onclick="startQuiz()"
-        class="w-full py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-2xl shadow-lg shadow-slate-900/20 transition duration-200 transform active:scale-98 flex items-center justify-center">
-        <span>เริ่มทำแบบทดสอบ</span>
+      <button id="intro-btn" onclick="nextIntroStep()"
+        class="w-full py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-2xl shadow-lg shadow-slate-900/20 transition duration-200 transform active:scale-98 flex items-center justify-center text-base">
+        <span id="intro-btn-text">จริงๆ</span>
       </button>
     </div>
 
@@ -150,18 +155,18 @@
         class="bg-white/80 backdrop-blur border border-white/60 rounded-2xl px-5 py-3.5 shadow-sm flex flex-col gap-2">
         <div class="flex justify-between items-center text-xs font-medium text-slate-500">
           <span>ความคืบหน้า</span>
-          <span id="quiz-progress-text" class="font-bold text-indigo-600">ข้อ 1 / 6</span>
+          <span id="quiz-progress-text" class="font-bold text-quiz-green">ข้อ 1 / 8</span>
         </div>
         <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-          <div id="quiz-progress-bar" class="bg-indigo-600 h-full rounded-full transition-all duration-300 ease-out"
-            style="width: 16.6%"></div>
+          <div id="quiz-progress-bar" class="bg-quiz-green h-full rounded-full transition-all duration-300 ease-out"
+            style="width: 12.5%"></div>
         </div>
       </div>
 
       <!-- Question Card -->
       <div id="question-card"
         class="fade-enter bg-white/90 backdrop-blur-xl border border-white/80 rounded-3xl p-6 sm:p-7 shadow-xl shadow-slate-200/50">
-        <div class="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 font-semibold text-xs rounded-lg mb-3"
+        <div class="inline-block px-3 py-1 bg-quiz-green-light text-quiz-green font-semibold text-xs rounded-lg mb-3"
           id="question-tag">
           สถานการณ์ที่ 1
         </div>
@@ -172,6 +177,24 @@
         <!-- Options Container -->
         <div id="options-container" class="space-y-3">
           <!-- Options will be injected by JavaScript -->
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
+          <button id="btn-prev" onclick="prevQuestion()" disabled
+            class="w-1/2 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-2xl transition duration-200 flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:pointer-events-none text-sm active:scale-98">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>ย้อนกลับ</span>
+          </button>
+          <button id="btn-next" onclick="nextQuestion()" disabled
+            class="w-1/2 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-2xl shadow-lg shadow-slate-900/20 transition duration-200 flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:pointer-events-none text-sm active:scale-98">
+            <span id="btn-next-text">ถัดไป</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -197,66 +220,24 @@
         </div>
 
         <!-- Result Hero -->
-        <div class="py-6 text-center relative z-10">
-          <div id="result-emoji"
-            class="inline-flex items-center justify-center px-6 py-4 mx-auto rounded-2xl bg-indigo-50 border border-indigo-100 mb-3 text-sm font-medium text-indigo-600 shadow-inner">
-            รูปภาพ
+        <div class="py-8 text-center relative z-10">
+          <div id="result-image-container" class="mb-4 flex justify-center">
+            <img id="result-image" src="image/result_page-0001.jpg" alt="Result Image"
+              class="w-64 max-w-full h-auto rounded-2xl shadow-md border border-slate-100 object-cover mx-auto" />
+            <div id="result-emoji"
+              class="hidden items-center justify-center px-6 py-4 mx-auto rounded-2xl bg-indigo-50 border border-indigo-100 text-sm font-medium text-indigo-600 shadow-inner">
+              ยังไม่ได้กำหนดค่า
+            </div>
           </div>
-          <span id="result-type-en" class="text-xs uppercase font-bold tracking-wider text-indigo-600 mb-1 block">
-            THE CREATIVE VISIONARY
+          <span id="result-type-en" class="text-xs uppercase font-bold tracking-wider text-indigo-600 mb-2 block">
+            ไม่ต้องรับสาย ถ้าเธอไม่เหงา
           </span>
-          <h2 id="result-title-th" class="text-2xl font-bold text-slate-900 mb-3">
-            นักสร้างสรรค์ผู้จุดประกายความคิด
+          <h2 id="result-title-th" class="text-2xl sm:text-3xl font-bold text-slate-900 mb-4">
+            Jumpy Capy
           </h2>
           <p id="result-description" class="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xs mx-auto">
-            คุณเป็นคนที่มีไอเดียแปลกใหม่อยู่เสมอ มีความยืดหยุ่นสูง และมักมองเห็นความเป็นไปได้ใหม่ๆ
-            ในสิ่งที่คนอื่นมองข้าม
+            กลัวถูกทิ้ง กลัวผิดหวัง จนบางทีถอยหนีไปเองก่อนจะได้เริ่มรักใครซักคนจริงๆ อยู่เป็นโสดโดยไม่มีสาเหตุดีกว่าเป็นเศษ แล้วไม่มีความหมาย
           </p>
-        </div>
-
-        <!-- Tags / Keywords -->
-        <div class="mb-5 relative z-10">
-          <p class="text-[11px] font-semibold text-slate-400 mb-2 uppercase tracking-wider">คีย์เวิร์ดประจำตัว</p>
-          <div id="result-tags" class="flex flex-wrap gap-1.5">
-            <!-- Tags injected by JS -->
-          </div>
-        </div>
-
-        <!-- Energy Stats Bar -->
-        <div class="bg-slate-50/90 rounded-2xl p-4 border border-slate-100 mb-4 relative z-10">
-          <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3">สรุปผล</p>
-
-          <div class="stat-row">
-            <div class="flex justify-between text-xs font-medium text-slate-600 mb-2 leading-normal">
-              <span id="stat-1-name">ความคิดสร้างสรรค์ & นวัตกรรม</span>
-              <span id="stat-1-val" class="font-bold text-indigo-600 shrink-0 ml-2">95%</span>
-            </div>
-            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-              <div id="stat-1-bar" class="h-full bg-indigo-500 rounded-full" style="width: 95%"></div>
-            </div>
-          </div>
-
-          <div class="stat-row">
-            <div class="flex justify-between text-xs font-medium text-slate-600 mb-2 leading-normal">
-              <span id="stat-2-name">การปรับตัวตามสถานการณ์</span>
-              <span id="stat-2-val" class="font-bold text-indigo-600 shrink-0 ml-2">88%</span>
-            </div>
-            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-              <div id="stat-2-bar" class="h-full bg-indigo-500 rounded-full" style="width: 88%"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Compatibility -->
-        <div class="grid grid-cols-2 gap-2 text-xs pt-1 relative z-10">
-          <div class="p-2.5 rounded-xl bg-indigo-50/60 border border-indigo-100/80">
-            <span class="text-[10px] text-indigo-600 font-bold block mb-0.5">พลังคู่คิดที่เข้าขา</span>
-            <span id="result-match" class="font-medium text-slate-800">นักวางแผนสุขุม</span>
-          </div>
-          <div class="p-2.5 rounded-xl bg-amber-50/60 border border-amber-100/80">
-            <span class="text-[10px] text-amber-600 font-bold block mb-0.5">เคล็ดลับเติมพลัง</span>
-            <span id="result-tip" class="font-medium text-slate-800">พื้นที่ทดลองไอเดีย</span>
-          </div>
         </div>
 
         <!-- Card Footer (Brand Watermark - Preserved Empty Space) -->
@@ -275,7 +256,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
-          <span id="btn-download-text">บันทึกรูปภาพผลลัพธ์ (.PNG)</span>
+          <span id="btn-download-text">บันทึกรูปภาพผลลัพธ์</span>
         </button>
 
         <button onclick="restartQuiz()"
@@ -304,139 +285,148 @@
   </footer>
 
   <script>
-    // --- 1. ข้อมูลคำถามและตัวเลือก (6 ข้อ) ---
+    // --- 0. ข้อมูลสเต็ปการ์ดต้อนรับ (3 การ์ด) ---
+    const introSteps = [
+      {
+        title: "อยากเป็นคนโปรดแต่ดันโสดซะงั้น",
+        btnText: "จริงๆ"
+      },
+      {
+        title: "อยากรู้มั้ยว่าทำไม",
+        btnText: "อยากรู้"
+      },
+      {
+        title: "ตอบคำถามก่อน",
+        btnText: "เริ่มเลย"
+      }
+    ];
+
+    let currentIntroStep = 0;
+
+    function renderIntroStep() {
+      const step = introSteps[currentIntroStep];
+      const titleEl = document.getElementById("intro-title");
+      const btnTextEl = document.getElementById("intro-btn-text");
+      if (titleEl) titleEl.textContent = step.title;
+      if (btnTextEl) btnTextEl.textContent = step.btnText;
+
+      screenWelcome.classList.remove("intro-fade-enter");
+      void screenWelcome.offsetWidth; // Trigger reflow
+      screenWelcome.classList.add("intro-fade-enter");
+    }
+
+    function nextIntroStep() {
+      if (currentIntroStep < introSteps.length - 1) {
+        currentIntroStep++;
+        renderIntroStep();
+      } else {
+        startQuiz();
+      }
+    }
+
+    // --- 1. ข้อมูลคำถามและตัวเลือก (8 ข้อ) ---
     const quizQuestions = [
       {
         id: 1,
-        tag: "สถานการณ์ที่ 1: วันพักผ่อน",
-        title: "เมื่อมีวันหยุด 1 วันที่ไม่มีตารางนัดหมายใดๆ คุณมักจะเลือกทำสิ่งไหน?",
+        tag: "ข้อ 1/8",
+        title: "เวลามีคนชวนออกเดตครั้งแรก คุณ...",
         options: [
-          { text: "หาคาเฟ่สวยๆ นั่งอ่านหนังสือ หรือลองทำโปรเจกต์ใหม่ที่อยากทำ", archetype: "CREATIVE" },
-          { text: "วางแผนจัดการห้อง จัดตารางชีวิตสัปดาห์หน้า หรือทำงานค้างให้เสร็จ", archetype: "STRATEGIST" },
-          { text: "นัดแก๊งเพื่อนไปเที่ยวข้างนอก ปาร์ตี้ หรือทำกิจกรรมกลางแจ้ง", archetype: "SPARK" },
-          { text: "นอนพักผ่อน ฟังเพลย์ลิสต์สบายๆ หรือคุยโทรศัพท์กับคนรู้ใจ", archetype: "HARMONIZER" }
+          { text: "กังวลล่วงหน้าไปหมดว่าจะพูดอะไรผิดหรือเปล่า", choice: "ก" },
+          { text: "รู้สึกเหนื่อยล่วงหน้าเวลาต้องเจอคนใหม่ ชอบอยู่กับตัวเองมากกว่า", choice: "ข" },
+          { text: "ตื่นเต้นอยากรู้ว่าจะได้เจอโลกใหม่ๆ ผ่านคนคนนี้ไหม", choice: "ค" },
+          { text: "เตรียมตัวและวางแผนไว้ล่วงหน้าหมดแล้วว่าจะทำยังไง", choice: "ง" },
+          { text: "คิดในใจไว้ก่อนว่าถ้าคุยกันไม่ตรงจุด ก็ไม่ฝืนต่อ", choice: "จ" }
         ]
       },
       {
         id: 2,
-        tag: "สถานการณ์ที่ 2: การแก้ปัญหา",
-        title: "เมื่อเจอปัญหาไม่คาดฝันในโปรเจกต์ สิ่งแรกที่คุณมักทำคืออะไร?",
+        tag: "ข้อ 2/8",
+        title: "มาตรฐานการเลือกคนที่จะคบ คุณมักจะ...",
         options: [
-          { text: "คิดนอกกรอบ หาทางออกใหม่ๆ ที่ไม่มีใครเคยทำมาก่อน", archetype: "CREATIVE" },
-          { text: "วิเคราะห์สาเหตุ แยกย่อยข้อมูล และวางแผนแก้ปัญหาอย่างเป็นระบบ", archetype: "STRATEGIST" },
-          { text: "ลุยแก้ไขทันที ปรับเปลี่ยนตามหน้างานด้วยความรวดเร็ว", archetype: "SPARK" },
-          { text: "คุยกับทุกคนในทีมเพื่อสร้างความเข้าใจและช่วยกันประคองอารมณ์", archetype: "HARMONIZER" }
+          { text: "กลัวเลือกผิดจนไม่กล้าตัดสินใจ", choice: "ก" },
+          { text: "ไม่รีบหา เพราะไม่ได้รู้สึกขาดคนคุยด้วยอยู่แล้ว", choice: "ข" },
+          { text: "อยากได้คนที่คิดต่าง ท้าทายมุมมองเดิมๆ ของตัวเอง", choice: "ค" },
+          { text: "มีเช็กลิสต์ชัดเจนในใจ ถ้าไม่ครบก็ยังไม่ใช่", choice: "ง" },
+          { text: "ต้องเป็นตัวของตัวเองได้เต็มที่ ไม่ต้องเกรงใจกัน", choice: "จ" }
         ]
       },
       {
         id: 3,
-        tag: "สถานการณ์ที่ 3: บรรยากาศโต๊ะทำงาน",
-        title: "หากเปิดดูโต๊ะทำงานหรือหน้าจอคอมพิวเตอร์ของคุณ สภาพมักจะเป็นอย่างไร?",
+        tag: "ข้อ 3/8",
+        title: "เมื่อพูดถึง \"เวลาว่าง\" ของคุณตอนนี้...",
         options: [
-          { text: "เต็มไปด้วย Moodboard กระดาษโน้ตไอเดีย และของสะสมที่มีเอกลักษณ์", archetype: "CREATIVE" },
-          { text: "เป็นระเบียบ เรียบร้อย มีโฟลเดอร์แยกชัดเจนและ To-do list ครบถ้วน", archetype: "STRATEGIST" },
-          { text: "มีของหลากหลายชิ้นพร้อมหยิบใช้ มีสติ๊กเกอร์สีสันสดใส และขนมของว่าง", archetype: "SPARK" },
-          { text: "มีต้นไม้เล็กๆ รูปภาพความทรงจำ หรือแก้วน้ำมินิมอลสบายตา", archetype: "HARMONIZER" }
+          { text: "มักถูกความคิดกังวลเรื่องความสัมพันธ์แทรกเข้ามาบ่อยๆ", choice: "ก" },
+          { text: "ใช้ชาร์จพลังคนเดียว และรู้สึกพอใจกับมันมาก", choice: "ข" },
+          { text: "เต็มไปด้วยงานอดิเรกและความสนใจใหม่ๆ ที่อยากลอง", choice: "ค" },
+          { text: "วางแผนไว้ล่วงหน้าเพื่อพัฒนาตัวเองหรือทำงาน", choice: "ง" },
+          { text: "ใช้ตามใจตัวเองเต็มที่ ไม่ต้องประนีประนอมกับใคร", choice: "จ" }
         ]
       },
       {
         id: 4,
-        tag: "สถานการณ์ที่ 4: การทำงานกลุ่ม",
-        title: "ในบทบาทการทำงานกลุ่ม คุณมักจะเป็นบุคคลแบบใดโดยธรรมชาติ?",
+        tag: "ข้อ 4/8",
+        title: "คนรอบตัวมักบอกว่าคุณเป็นคนแบบไหนในเรื่องความรัก",
         options: [
-          { text: "ผู้เสนอไอเดียและสร้างคอนเซ็ปต์ใหม่ๆ ให้กับทีม", archetype: "CREATIVE" },
-          { text: "ผู้วางไทม์ไลน์ ตรวจสอบความถูกต้อง และควบคุมทิศทาง", archetype: "STRATEGIST" },
-          { text: "ผู้สร้างบรรยากาศให้กระตือรือร้นและกระตุ้นให้ทุกคนเริ่มลงมือทำ", archetype: "SPARK" },
-          { text: "ผู้รับฟัง ปรับความเข้าใจ และประสานรอยต่อให้ทุกคนทำงานราบรื่น", archetype: "HARMONIZER" }
+          { text: "อ่อนไหว คิดมาก กังวลง่าย", choice: "ก" },
+          { text: "เข้าถึงยาก ไม่ค่อยเปิดตัวเรื่องหัวใจ", choice: "ข" },
+          { text: "มีไอเดียแปลกใหม่ ไม่ชอบกรอบความสัมพันธ์แบบเดิมๆ", choice: "ค" },
+          { text: "จริงจัง มีมาตรฐาน วางแผนทุกอย่าง", choice: "ง" },
+          { text: "ตรงไปตรงมา ไม่ยอมง่ายๆ แม้ในเรื่องหัวใจ", choice: "จ" }
         ]
       },
       {
         id: 5,
-        tag: "สถานการณ์ที่ 5: การเลือกเครื่องดื่ม",
-        title: "เครื่องดื่มที่บ่งบอกความรู้สึกของคุณได้ดีที่สุดในเวลาที่ต้องการรีเฟรช?",
+        tag: "ข้อ 5/8",
+        title: "สิ่งที่ทำให้คุณลังเลจะเริ่มความสัมพันธ์ใหม่มากที่สุดคือ",
         options: [
-          { text: "Cold Brew ผสมผลไม้รสชาติซับซ้อนและแปลกใหม่", archetype: "CREATIVE" },
-          { text: "Americano ไม่หวาน เข้มข้น ตรงไปตรงมา", archetype: "STRATEGIST" },
-          { text: "Matcha Latte หรือ Italian Soda สีสันสดใส ชุ่มฉ่ำ", archetype: "SPARK" },
-          { text: "ชาร้อนกลิ่นคาโมมายล์ หรือ นมสดอุ่นๆ ละมุนใจ", archetype: "HARMONIZER" }
+          { text: "กลัวผิดหวังหรือถูกทำร้ายจิตใจซ้ำ", choice: "ก" },
+          { text: "ไม่อยากเสียพลังงานไปกับการต้องปรับตัวเข้าหาใคร", choice: "ข" },
+          { text: "กลัวว่าความสัมพันธ์จะจำกัดอิสระในการใช้ชีวิต", choice: "ค" },
+          { text: "ยังไม่เจอใครที่ตรงตามที่วางแผนไว้ในชีวิต", choice: "ง" },
+          { text: "ไม่อยากต้องยอมคนอื่นบ่อยๆ เพื่อรักษาความสัมพันธ์", choice: "จ" }
         ]
       },
       {
         id: 6,
-        tag: "สถานการณ์ที่ 6: คติประจำใจ",
-        title: "คำพูดใดที่ตรงกับทัศนคติการใช้ชีวิตของคุณมากที่สุด?",
+        tag: "ข้อ 6/8",
+        title: "เวลาคุยกับใครแล้วความเห็นไม่ตรงกัน คุณมักจะ...",
         options: [
-          { text: "“ความสนุกที่สุดคือการได้สร้างสรรค์สิ่งที่ไม่เคยมีอยู่จริง”", archetype: "CREATIVE" },
-          { text: "“ความสำเร็จที่ยั่งยืนเริ่มต้นจากการวางแผนและลงมือทำอย่างแม่นยำ”", archetype: "STRATEGIST" },
-          { text: "“ชีวิตคือการผจญภัย อย่ากลัวที่จะลองและเต็มที่กับทุกจังหวะ”", archetype: "SPARK" },
-          { text: "“ความสุขที่แท้จริงคือความสงบในใจและความสัมพันธ์ที่จริงใจ”", archetype: "HARMONIZER" }
+          { text: "กังวลว่าอีกฝ่ายจะโกรธหรือหมดใจไปเลย", choice: "ก" },
+          { text: "เงียบและถอยออกจากบทสนทนา ไม่อยากปะทะ", choice: "ข" },
+          { text: "สนุกกับการถกเถียง มองว่าเป็นมุมมองใหม่ที่น่าสนใจ", choice: "ค" },
+          { text: "อธิบายเหตุผลอย่างมีระบบ ยึดตามหลักการที่วางไว้", choice: "ง" },
+          { text: "ยืนยันความเห็นตัวเองตรงๆ ไม่ค่อยยอมง่ายๆ", choice: "จ" }
+        ]
+      },
+      {
+        id: 7,
+        tag: "ข้อ 7/8",
+        title: "ถ้าให้จินตนาการชีวิตอีก 5 ปีข้างหน้า คุณเห็นตัวเองแบบไหน",
+        options: [
+          { text: "กังวลไปก่อนว่าจะยังไม่มีใครอยู่ข้างๆ", choice: "ก" },
+          { text: "ใช้ชีวิตเงียบสงบตามจังหวะของตัวเอง มีหรือไม่มีคู่ก็ได้", choice: "ข" },
+          { text: "ได้ลองอะไรใหม่ๆ เยอะ ไม่ผูกกับแผนเดิม", choice: "ค" },
+          { text: "มีเป้าหมายชัดเจน ทำตามขั้นตอนที่วางไว้", choice: "ง" },
+          { text: "เป็นตัวของตัวเองเต็มที่ ไม่ต้องปรับตามใครมาก", choice: "จ" }
+        ]
+      },
+      {
+        id: 8,
+        tag: "ข้อ 8/8",
+        title: "เหตุผลลึกๆ ที่ทำให้ตอนนี้คุณยังโสดคือ...",
+        options: [
+          { text: "กลัวว่าจะเจ็บปวดถ้าเปิดใจแล้วผิดหวังอีก", choice: "ก" },
+          { text: "ยังไม่รู้สึกว่าจำเป็นต้องมีใครมาเติมเต็ม อยู่คนเดียวก็โอเค", choice: "ข" },
+          { text: "ยังอยากค้นหาตัวเองและโลกให้มากกว่านี้ก่อน", choice: "ค" },
+          { text: "ยังไม่เจอคนที่ผ่านมาตรฐานที่ตั้งไว้", choice: "ง" },
+          { text: "ไม่อยากประนีประนอมกับใครเพื่อให้ความสัมพันธ์ไปต่อ", choice: "จ" }
         ]
       }
     ];
 
-    // --- 2. ข้อมูลผลลัพธ์ (4 รูปแบบ Archetypes) ---
-    const archetypes = {
-      CREATIVE: {
-        code: "CREATIVE",
-        emoji: "💡",
-        typeEn: "THE CREATIVE VISIONARY",
-        titleTh: "นักสร้างสรรค์ผู้จุดประกาย",
-        description: "คุณเป็นคนที่มีจินตนาการกว้างไกล มีความสุขกับการสร้างสิ่งใหม่ๆ มองเห็นความเชื่อมโยงในสิ่งที่คนอื่นนึกไม่ถึง และมักเป็นผู้นำพาไอเดียสดใหม่มาสู่คนรอบข้างเสมอ",
-        tags: ["#คิดนอกกรอบ", "#ไอเดียพุ่งพล่าน", "#รักอิสระ", "#มีสไตล์เฉพาะตัว"],
-        stat1: { name: "จินตนาการ & ไอเดียสร้างสรรค์", value: 96 },
-        stat2: { name: "ความยืดหยุ่นและการปรับตัว", value: 88 },
-        match: "นักวางแผนสุขุมรอบคอบ",
-        tip: "หาเวลาจดบันทึกไอเดียก่อนที่มันจะลอยหายไป",
-        themeColor: "indigo",
-        accentBg: "bg-purple-400"
-      },
-      STRATEGIST: {
-        code: "STRATEGIST",
-        emoji: "♟️",
-        typeEn: "THE CALM STRATEGIST",
-        titleTh: "นักวางแผนสุขุมรอบคอบ",
-        description: "คุณเป็นคนมีตรรกะ มีความสามารถในการวิเคราะห์สถานการณ์ได้อย่างเฉียบคม จัดการทุกอย่างเป็นระบบ มองการณ์ไกล และเป็นที่พึ่งพาที่มั่นคงที่สุดของคนในทีม",
-        tags: ["#วางแผนแม่นยำ", "#มีเหตุผล", "#แก้ปัญหาเก่ง", "#มีระบบระเบียบ"],
-        stat1: { name: "การคิดวิเคราะห์เชิงตรรกะ", value: 98 },
-        stat2: { name: "การโฟกัสและมีเป้าหมาย", value: 92 },
-        match: "นักสร้างสรรค์ผู้จุดประกาย",
-        tip: "อนุญาตให้ตัวเองได้พักและปล่อยวางความสมบูรณ์แบบบ้าง",
-        themeColor: "blue",
-        accentBg: "bg-blue-400"
-      },
-      SPARK: {
-        code: "SPARK",
-        emoji: "⚡",
-        typeEn: "THE ENERGETIC SPARK",
-        titleTh: "สายลุยเปี่ยมพลังความสนุก",
-        description: "คุณเป็นคนที่เปี่ยมไปด้วยพลังบวก ความกระตือรือร้น และความกล้าที่จะลงมือทำ เข้ากับคนง่าย สร้างรอยยิ้มและบรรยากาศที่สนุกสนานให้ทุกพื้นที่ที่คุณอยู่",
-        tags: ["#พลังงานเหลือล้น", "#ลุยได้ทุกสถานการณ์", "#สร้างเสียงหัวเราะ", "#ใจกว้าง"],
-        stat1: { name: "ความกระตือรือร้นและพลังงาน", value: 95 },
-        stat2: { name: "ความกล้าตัดสินใจและลงมือทำ", value: 90 },
-        match: "ผู้เชื่อมโยงความอบอุ่น",
-        tip: "ลองหยุดพักสั้นๆ เพื่อชาร์จพลังก่อนเริ่มลุยโปรเจกต์ถัดไป",
-        themeColor: "amber",
-        accentBg: "bg-amber-400"
-      },
-      HARMONIZER: {
-        code: "HARMONIZER",
-        emoji: "🌿",
-        typeEn: "THE WARM HARMONIZER",
-        titleTh: "ผู้เชื่อมโยงความอบอุ่น",
-        description: "คุณเป็นคนที่มีความเข้าอกเข้าใจผู้อื่นสูง รับฟังอย่างใส่ใจ รักความสงบ และสร้างความสบายใจให้กับคนรอบข้าง เป็นเซฟโซนและพลังใจที่สำคัญของทุกคน",
-        tags: ["#ผู้ฟังที่ดี", "#เข้าอกเข้าใจ", "#รักความสงบ", "#เป็นที่พึ่งทางใจ"],
-        stat1: { name: "ความเข้าอกเข้าใจผู้อื่น (Empathy)", value: 97 },
-        stat2: { name: "การสร้างบรรยากาศที่ผ่อนคลาย", value: 94 },
-        match: "สายลุยเปี่ยมพลังความสนุก",
-        tip: "อย่าลืมดูแลความรู้สึกของตนเองก่อนดูแลผู้อื่นเสมอ",
-        themeColor: "emerald",
-        accentBg: "bg-emerald-400"
-      }
-    };
-
     // --- State Management ---
     let currentQuestionIndex = 0;
-    let scores = { CREATIVE: 0, STRATEGIST: 0, SPARK: 0, HARMONIZER: 0 };
+    let userAnswers = new Array(quizQuestions.length).fill(null);
 
     // --- DOM Elements ---
     const screenWelcome = document.getElementById("screen-welcome");
@@ -449,10 +439,13 @@
     const optionsContainer = document.getElementById("options-container");
     const quizProgressBar = document.getElementById("quiz-progress-bar");
     const quizProgressText = document.getElementById("quiz-progress-text");
+    const btnPrev = document.getElementById("btn-prev");
+    const btnNext = document.getElementById("btn-next");
+    const btnNextText = document.getElementById("btn-next-text");
 
     // --- Functions ---
     function startQuiz() {
-      scores = { CREATIVE: 0, STRATEGIST: 0, SPARK: 0, HARMONIZER: 0 };
+      userAnswers = new Array(quizQuestions.length).fill(null);
       currentQuestionIndex = 0;
 
       screenWelcome.classList.add("hidden");
@@ -463,7 +456,7 @@
       renderQuestion();
     }
 
-    function renderQuestion() {
+    function renderQuestion(animate = true) {
       const q = quizQuestions[currentQuestionIndex];
 
       // Update Question Info
@@ -478,39 +471,129 @@
       // Reset & Render Option Buttons
       optionsContainer.innerHTML = "";
 
+      const thaiBadges = ["ก.", "ข.", "ค.", "ง.", "จ."];
+
       q.options.forEach((opt, index) => {
         const btn = document.createElement("button");
-        btn.className = `option-card w-full text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-indigo-50/50 hover:border-indigo-300 transition-all duration-200 shadow-sm flex items-start gap-3 group`;
+        btn.dataset.choice = opt.choice;
+        btn.className = "option-card w-full text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-indigo-50/50 hover:border-indigo-300 transition-all duration-150 shadow-sm flex items-start gap-3 group";
 
         const badge = document.createElement("span");
-        badge.className = "w-6 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 transition-colors";
-        badge.textContent = String.fromCharCode(65 + index); // A, B, C, D
+        badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 transition-colors";
+        badge.textContent = thaiBadges[index] || opt.choice;
 
         const text = document.createElement("span");
-        text.className = "text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal";
+        text.className = "option-text text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal transition-colors";
         text.textContent = opt.text;
 
         btn.appendChild(badge);
         btn.appendChild(text);
 
-        btn.onclick = () => selectOption(opt.archetype);
+        btn.onclick = () => selectOption(opt.choice);
         optionsContainer.appendChild(btn);
       });
 
-      // Animate Question Entry
-      questionCard.classList.remove("fade-enter");
-      void questionCard.offsetWidth; // Trigger reflow
-      questionCard.classList.add("fade-enter");
+      updateOptionHighlight();
+
+      // Animate Question Entry only when navigating questions
+      if (animate) {
+        questionCard.classList.remove("fade-enter");
+        void questionCard.offsetWidth; // Trigger reflow
+        questionCard.classList.add("fade-enter");
+      }
     }
 
-    function selectOption(archetype) {
-      scores[archetype] = (scores[archetype] || 0) + 1;
+    function updateOptionHighlight() {
+      const selectedChoice = userAnswers[currentQuestionIndex];
+      const buttons = optionsContainer.querySelectorAll(".option-card");
 
-      if (currentQuestionIndex < quizQuestions.length - 1) {
-        currentQuestionIndex++;
-        renderQuestion();
+      buttons.forEach((btn) => {
+        const choice = btn.dataset.choice;
+        const isSelected = (choice === selectedChoice);
+        const badge = btn.querySelector(".option-badge");
+        const text = btn.querySelector(".option-text");
+
+        if (isSelected) {
+          btn.className = "option-card w-full text-left p-4 rounded-2xl border-2 border-quiz-green bg-quiz-green-light ring-2 ring-quiz-green transition-all duration-150 shadow-sm flex items-start gap-3 group";
+          if (badge) badge.className = "option-badge w-7 h-6 rounded-lg bg-quiz-green text-white flex items-center justify-center font-bold text-xs shrink-0 transition-colors";
+          if (text) text.className = "option-text text-xs sm:text-sm text-slate-900 leading-snug font-semibold transition-colors";
+        } else {
+          btn.className = "option-card w-full text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-quiz-green-light/50 hover:border-quiz-green/40 transition-all duration-150 shadow-sm flex items-start gap-3 group";
+          if (badge) badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-quiz-green group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 transition-colors";
+          if (text) text.className = "option-text text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal transition-colors";
+        }
+      });
+
+      // Update Navigation Buttons State
+      btnPrev.disabled = (currentQuestionIndex === 0);
+      btnNext.disabled = (selectedChoice === null);
+
+      if (currentQuestionIndex === quizQuestions.length - 1) {
+        btnNextText.textContent = "ดูผลลัพธ์";
       } else {
-        showResults();
+        btnNextText.textContent = "ถัดไป";
+      }
+    }
+
+    function selectOption(choice) {
+      userAnswers[currentQuestionIndex] = choice;
+      updateOptionHighlight();
+    }
+
+    // --- 2. ข้อมูลผลลัพธ์ (Capy Archetypes) ---
+    const capyResults = {
+      ก: {
+        title: "Jumpy Capy",
+        subtitle: "ไม่ต้องรับสาย ถ้าเธอไม่เหงา",
+        description: "กลัวถูกทิ้ง กลัวผิดหวัง จนบางทีถอยหนีไปเองก่อนจะได้เริ่มรักใครซักคนจริงๆ อยู่เป็นโสดโดยไม่มีสาเหตุดีกว่าเป็นเศษ แล้วไม่มีความหมาย",
+        image: "image/result_page-0001.jpg",
+        accentBg: "bg-rose-400"
+      },
+      ข: {
+        title: "Cozy Capy",
+        subtitle: "ไม่สะอื่น สดชื่นด้วยซ้ำ",
+        description: "พึงพอใจมากจ้ากับการอยู่คนเดียว ไม่ต้องมีใครมาเติมเต็มก็มีความสุขได้ด้วยตัวเอง ชาร์จพลังงานได้ด้วยตัวเองเนอะ ไม่ใช่จากการมีคู่",
+        image: "image/result_page-0002.jpg",
+        accentBg: "bg-amber-400"
+      },
+      ค: {
+        title: "Free Capy",
+        subtitle: "รู้ว่าเก๋าแต่เบาหน่อยโก๋",
+        description: "อยากลองอะไรใหม่ๆตลอดเวลา ไม่ชอบการโดนควบคุม ตีกรอบ อย่ามาจับ",
+        image: "image/result_page-0003.jpg",
+        accentBg: "bg-sky-400"
+      },
+      ง: {
+        title: "Tidy Capy",
+        subtitle: "ชัดเจนในเลนติ๋ม",
+        description: "ขอกาเช็คลิสต์แปป ครบตอนไหนว่ากัน แอบเลือกคนน้า มีมาตรฐานชัดเจน",
+        image: "image/result_page-0004.jpg",
+        accentBg: "bg-indigo-400"
+      },
+      จ: {
+        title: "Bold Capy",
+        subtitle: "รู้ว่าแย่ แต่ไม่แก้จ้า",
+        description: "ไม่ยอมปรับตัวหรือประนีประนอมเพื่อรักษาความสัมพันธ์ ยอมเป็นตัวเองดีกว่ายอมเสียตัวเองบางส่วนไป",
+        image: "image/result_page-0005.jpg",
+        accentBg: "bg-purple-400"
+      }
+    };
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion(true);
+      }
+    }
+
+    function nextQuestion() {
+      if (userAnswers[currentQuestionIndex] !== null) {
+        if (currentQuestionIndex < quizQuestions.length - 1) {
+          currentQuestionIndex++;
+          renderQuestion(true);
+        } else {
+          showResults();
+        }
       }
     }
 
@@ -520,50 +603,66 @@
       screenResult.classList.remove("hidden");
       screenResult.classList.add("flex", "fade-enter");
 
-      // Calculate Winner Archetype
-      let highestScore = -1;
-      let winningArchetype = "CREATIVE";
+      // Count scores for ก, ข, ค, ง, จ
+      const counts = { ก: 0, ข: 0, ค: 0, ง: 0, จ: 0 };
+      userAnswers.forEach((ans) => {
+        if (ans && counts[ans] !== undefined) {
+          counts[ans]++;
+        }
+      });
 
-      for (const [type, score] of Object.entries(scores)) {
-        if (score > highestScore) {
-          highestScore = score;
-          winningArchetype = type;
+      // Find max score
+      let maxScore = -1;
+      for (const key in counts) {
+        if (counts[key] > maxScore) {
+          maxScore = counts[key];
         }
       }
 
-      const res = archetypes[winningArchetype];
+      // Check if there is a unique winner or tie
+      const winners = Object.keys(counts).filter((key) => counts[key] === maxScore);
 
-      // Populate Result Screen Elements
-      document.getElementById("result-type-en").textContent = res.typeEn;
-      document.getElementById("result-title-th").textContent = res.titleTh;
-      document.getElementById("result-description").textContent = res.description;
-
-      // Accent blob
+      const titleEl = document.getElementById("result-title-th");
+      const subtitleEl = document.getElementById("result-type-en");
+      const descEl = document.getElementById("result-description");
+      const imgEl = document.getElementById("result-image");
+      const emojiEl = document.getElementById("result-emoji");
       const bgAccent = document.getElementById("result-bg-accent");
-      bgAccent.className = `absolute top-0 right-0 -mr-12 -mt-12 w-44 h-44 rounded-full opacity-30 blur-2xl ${res.accentBg}`;
 
-      // Tags
-      const tagsContainer = document.getElementById("result-tags");
-      tagsContainer.innerHTML = "";
-      res.tags.forEach(t => {
-        const span = document.createElement("span");
-        span.className = "keyword-tag";
-        span.textContent = t;
-        tagsContainer.appendChild(span);
-      });
+      if (winners.length === 1 && capyResults[winners[0]]) {
+        const res = capyResults[winners[0]];
+        if (titleEl) titleEl.textContent = res.title;
+        if (subtitleEl) subtitleEl.textContent = res.subtitle;
+        if (descEl) descEl.textContent = res.description;
+        if (imgEl) {
+          imgEl.src = res.image;
+          imgEl.classList.remove("hidden");
+        }
+        if (emojiEl) {
+          emojiEl.classList.add("hidden");
+          emojiEl.classList.remove("flex", "inline-flex");
+        }
+        if (bgAccent) bgAccent.className = `absolute top-0 right-0 -mr-12 -mt-12 w-44 h-44 rounded-full opacity-30 blur-2xl ${res.accentBg}`;
+      } else {
+        // Tie case
+        if (titleEl) titleEl.textContent = "ยังไม่ได้กำหนดค่า";
+        if (subtitleEl) subtitleEl.textContent = "ยังไม่ได้กำหนดค่า";
+        if (descEl) descEl.textContent = "ยังไม่ได้กำหนดค่า";
+        if (imgEl) imgEl.classList.add("hidden");
+        if (emojiEl) {
+          emojiEl.classList.remove("hidden");
+          emojiEl.classList.add("inline-flex");
+        }
+        if (bgAccent) bgAccent.className = `absolute top-0 right-0 -mr-12 -mt-12 w-44 h-44 rounded-full opacity-30 blur-2xl bg-slate-300`;
+      }
+    }
 
-      // Stats
-      document.getElementById("stat-1-name").textContent = res.stat1.name;
-      document.getElementById("stat-1-val").textContent = `${res.stat1.value}%`;
-      document.getElementById("stat-1-bar").style.width = `${res.stat1.value}%`;
-
-      document.getElementById("stat-2-name").textContent = res.stat2.name;
-      document.getElementById("stat-2-val").textContent = `${res.stat2.value}%`;
-      document.getElementById("stat-2-bar").style.width = `${res.stat2.value}%`;
-
-      // Compatibility & Tips
-      document.getElementById("result-match").textContent = res.match;
-      document.getElementById("result-tip").textContent = res.tip;
+    function getFormattedDateStr() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
     }
 
     // --- 3. ฟังก์ชันดาวน์โหลดภาพการ์ดผลลัพธ์ (html2canvas) ---
@@ -582,51 +681,56 @@
           await document.fonts.ready;
         }
 
-        const cardWidth = card.getBoundingClientRect().width;
-
-        // Use html2canvas with exact clone dimensions
+        // Use html2canvas with optimized options for local file:// & clean Thai font rendering
         const canvas = await html2canvas(card, {
-          scale: 3, // ความละเอียดสูง คมชัด
+          scale: 3,
           useCORS: true,
+          allowTaint: true,
           backgroundColor: "#ffffff",
-          borderRadius: 24,
-          width: cardWidth,
+          logging: false,
           onclone: (clonedDoc) => {
             const clonedCard = clonedDoc.getElementById("result-card");
-            clonedCard.style.width = `${cardWidth}px`;
-            clonedCard.style.maxWidth = `${cardWidth}px`;
-            clonedCard.style.margin = "0";
+            if (clonedCard) {
+              clonedCard.style.fontFamily = "'Prompt', sans-serif";
+              clonedCard.style.letterSpacing = "normal";
+              const textElements = clonedCard.querySelectorAll("h1, h2, h3, p, span");
+              textElements.forEach((el) => {
+                el.style.fontFamily = "'Prompt', sans-serif";
+              });
+            }
           }
         });
 
         const imageURI = canvas.toDataURL("image/png");
 
-        // Trigger file download
+        // Trigger file download with quiz-result-YYYY-MM-DD.png
         const downloadLink = document.createElement("a");
-        downloadLink.download = `quiz-result-${Date.now()}.png`;
+        const dateStr = getFormattedDateStr();
+        downloadLink.download = `quiz-result-${dateStr}.png`;
         downloadLink.href = imageURI;
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
 
         // Reset Button
-        btnDownloadText.textContent = "บันทึกรูปภาพผลลัพธ์ (.PNG)";
+        btnDownloadText.textContent = "บันทึกรูปภาพผลลัพธ์";
         btnDownload.disabled = false;
 
         showToast("บันทึกรูปภาพผลลัพธ์สำเร็จแล้ว!");
       } catch (err) {
         console.error("Download image error: ", err);
-        btnDownloadText.textContent = "บันทึกรูปภาพผลลัพธ์ (.PNG)";
+        btnDownloadText.textContent = "บันทึกรูปภาพผลลัพธ์";
         btnDownload.disabled = false;
         showToast("ไม่สามารถสร้างรูปภาพได้ กรุณาลองใหม่อีกครั้ง");
       }
     }
 
     function restartQuiz() {
+      currentIntroStep = 0;
       screenResult.classList.add("hidden");
       screenResult.classList.remove("flex");
       screenWelcome.classList.remove("hidden");
-      screenWelcome.classList.add("fade-enter");
+      renderIntroStep();
     }
 
     function showToast(msg) {
