@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบทดสอบค้นหาตัวตนของคุณ | Lifestyle Archetype Quiz</title>
+  <!-- Google Fonts: Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- html2canvas Library สำหรับสร้างภาพดาวน์โหลด -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Prompt', 'sans-serif'],
+          },
+          colors: {
+            quiz: {
+              cream: '#FFFBF5',
+              dark: '#1E293B',
+              primary: '#6366F1',
+              secondary: '#EC4899',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Animation เฟดเข้า */
+    .fade-enter {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* สไตล์การ์ดตัวเลือก */
+    .option-card:active {
+      transform: scale(0.97);
+    }
+
+    /* จัดการความสูงบรรทัดสำหรับภาษาไทยและการบันทึกรูปภาพ */
+    #result-card {
+      word-break: break-word;
+    }
+    .stat-row {
+      margin-bottom: 12px;
+    }
+    .stat-row:last-child {
+      margin-bottom: 0;
+    }
+
+    /* สไตล์สำหรับกล่องข้อความและป้ายกำกับเพื่อให้อยู่กึ่งกลางเป๊ะทั้งบนหน้าเว็บและในรูปภาพ */
+    .badge-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.3;
+      padding: 5px 12px 4px 12px;
+      background-color: #f1f5f9;
+      color: #475569;
+      border-radius: 9999px;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .keyword-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.3;
+      padding: 5px 10px 4px 10px;
+      background-color: #f1f5f9;
+      color: #334155;
+      border-radius: 8px;
+      vertical-align: middle;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50/60 via-indigo-50/40 to-rose-50/60 min-h-screen text-slate-800 flex flex-col justify-between selection:bg-indigo-200">
+
+  <!-- Background Decorative Shapes -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-amber-200/40 rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- Header Bar -->
+  <header class="relative z-10 w-full max-w-xl mx-auto px-4 py-4 flex items-center justify-center">
+    <span class="font-bold text-slate-800 text-sm tracking-wide">LIFESTYLE LAB</span>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="relative z-10 w-full max-w-md mx-auto px-4 flex-1 flex flex-col justify-center py-2">
+    
+    <!-- SCREEN 1: Welcome Screen -->
+    <div id="screen-welcome" class="fade-enter bg-white/80 backdrop-blur-xl border border-white/60 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 text-center">
+      <div class="inline-flex items-center justify-center px-6 py-4 rounded-2xl bg-indigo-50 border border-indigo-100 mb-5 text-sm font-medium text-indigo-600 shadow-inner">
+        รูปภาพ
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mb-3">
+        ค้นหาพลังงานและตัวตนที่แท้จริงของคุณ
+      </h1>
+      <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6 font-light">
+        ตอบคำถามสั้นๆ เพื่อวิเคราะห์ <span class="font-medium text-indigo-600">Lifestyle Archetype</span> พร้อมรับการ์ดสรุปผลลัพธ์ฉบับพิเศษสำหรับคุณ
+      </p>
+
+      <!-- พื้นที่เว้นวรรคเพื่อรักษาสัดส่วนของหน้าจอให้สวยงามเหมือนเดิม -->
+      <div class="h-12 sm:h-14" aria-hidden="true"></div>
+
+      <button onclick="startQuiz()" class="w-full py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-2xl shadow-lg shadow-slate-900/20 transition duration-200 transform active:scale-98 flex items-center justify-center">
+        <span>เริ่มทำแบบทดสอบ</span>
+      </button>
+    </div>
+
+    <!-- SCREEN 2: Quiz Question Screen -->
+    <div id="screen-quiz" class="hidden flex-col gap-4">
+      <!-- Progress Bar & Counter -->
+      <div class="bg-white/80 backdrop-blur border border-white/60 rounded-2xl px-5 py-3.5 shadow-sm flex flex-col gap-2">
+        <div class="flex justify-between items-center text-xs font-medium text-slate-500">
+          <span>ความคืบหน้า</span>
+          <span id="quiz-progress-text" class="font-bold text-indigo-600">ข้อ 1 / 6</span>
+        </div>
+        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+          <div id="quiz-progress-bar" class="bg-indigo-600 h-full rounded-full transition-all duration-300 ease-out" style="width: 16.6%"></div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div id="question-card" class="fade-enter bg-white/90 backdrop-blur-xl border border-white/80 rounded-3xl p-6 sm:p-7 shadow-xl shadow-slate-200/50">
+        <div class="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 font-semibold text-xs rounded-lg mb-3" id="question-tag">
+          สถานการณ์ที่ 1
+        </div>
+        <h2 id="question-title" class="text-lg sm:text-xl font-bold text-slate-900 mb-6 leading-relaxed">
+          คำถามกำลังโหลด...
+        </h2>
+
+        <!-- Options Container -->
+        <div id="options-container" class="space-y-3">
+          <!-- Options will be injected by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Result Screen -->
+    <div id="screen-result" class="hidden flex-col gap-4">
+      
+      <!-- Shareable Result Card (Target for html2canvas) -->
+      <div id="result-card" class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-7 shadow-2xl shadow-slate-300/60 overflow-hidden relative">
+        
+        <!-- Result Background Decoration -->
+        <div id="result-bg-accent" class="absolute top-0 right-0 -mr-12 -mt-12 w-44 h-44 rounded-full opacity-30 blur-2xl"></div>
+
+        <!-- Result Card Header -->
+        <div class="flex justify-between items-center pb-4 border-b border-slate-100 relative z-10">
+          <div>
+            <p class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Your Inner Energy</p>
+            <p class="text-xs font-bold text-slate-800">ผลการวิเคราะห์บุคลิกภาพ</p>
+          </div>
+          <span class="badge-pill">LIFESTYLE LAB</span>
+        </div>
+
+        <!-- Result Hero -->
+        <div class="py-6 text-center relative z-10">
+          <div id="result-emoji" class="inline-flex items-center justify-center px-6 py-4 mx-auto rounded-2xl bg-indigo-50 border border-indigo-100 mb-3 text-sm font-medium text-indigo-600 shadow-inner">
+            รูปภาพ
+          </div>
+          <span id="result-type-en" class="text-xs uppercase font-bold tracking-wider text-indigo-600 mb-1 block">
+            THE CREATIVE VISIONARY
+          </span>
+          <h2 id="result-title-th" class="text-2xl font-bold text-slate-900 mb-3">
+            นักสร้างสรรค์ผู้จุดประกายความคิด
+          </h2>
+          <p id="result-description" class="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xs mx-auto">
+            คุณเป็นคนที่มีไอเดียแปลกใหม่อยู่เสมอ มีความยืดหยุ่นสูง และมักมองเห็นความเป็นไปได้ใหม่ๆ ในสิ่งที่คนอื่นมองข้าม
+          </p>
+        </div>
+
+        <!-- Tags / Keywords -->
+        <div class="mb-5 relative z-10">
+          <p class="text-[11px] font-semibold text-slate-400 mb-2 uppercase tracking-wider">คีย์เวิร์ดประจำตัว</p>
+          <div id="result-tags" class="flex flex-wrap gap-1.5">
+            <!-- Tags injected by JS -->
+          </div>
+        </div>
+
+        <!-- Energy Stats Bar -->
+        <div class="bg-slate-50/90 rounded-2xl p-4 border border-slate-100 mb-4 relative z-10">
+          <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3">สรุปผล</p>
+          
+          <div class="stat-row">
+            <div class="flex justify-between text-xs font-medium text-slate-600 mb-2 leading-normal">
+              <span id="stat-1-name">ความคิดสร้างสรรค์ & นวัตกรรม</span>
+              <span id="stat-1-val" class="font-bold text-indigo-600 shrink-0 ml-2">95%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div id="stat-1-bar" class="h-full bg-indigo-500 rounded-full" style="width: 95%"></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="flex justify-between text-xs font-medium text-slate-600 mb-2 leading-normal">
+              <span id="stat-2-name">การปรับตัวตามสถานการณ์</span>
+              <span id="stat-2-val" class="font-bold text-indigo-600 shrink-0 ml-2">88%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div id="stat-2-bar" class="h-full bg-indigo-500 rounded-full" style="width: 88%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compatibility -->
+        <div class="grid grid-cols-2 gap-2 text-xs pt-1 relative z-10">
+          <div class="p-2.5 rounded-xl bg-indigo-50/60 border border-indigo-100/80">
+            <span class="text-[10px] text-indigo-600 font-bold block mb-0.5">พลังคู่คิดที่เข้าขา</span>
+            <span id="result-match" class="font-medium text-slate-800">นักวางแผนสุขุม</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-amber-50/60 border border-amber-100/80">
+            <span class="text-[10px] text-amber-600 font-bold block mb-0.5">เคล็ดลับเติมพลัง</span>
+            <span id="result-tip" class="font-medium text-slate-800">พื้นที่ทดลองไอเดีย</span>
+          </div>
+        </div>
+
+        <!-- Card Footer (Brand Watermark - Preserved Empty Space) -->
+        <div class="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 min-h-[28px]">
+          <span>&nbsp;</span>
+          <span>&nbsp;</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons (Not included in image download) -->
+      <div class="space-y-2.5">
+        <button id="btn-download" onclick="downloadResultImage()" class="w-full py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-2xl shadow-lg shadow-slate-900/20 transition duration-200 flex items-center justify-center gap-2 active:scale-98">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          <span id="btn-download-text">บันทึกรูปภาพผลลัพธ์ (.PNG)</span>
+        </button>
+
+        <button onclick="restartQuiz()" class="w-full py-3 px-6 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-medium rounded-2xl transition duration-200 flex items-center justify-center gap-2 active:scale-98 text-sm">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span>ทำแบบทดสอบอีกครั้ง</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Notification Message Box (Modal / Toast) -->
+  <div id="toast-modal" class="fixed bottom-6 inset-x-0 mx-auto max-w-xs bg-slate-900 text-white px-4 py-3 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-xl opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+    <span id="toast-message">บันทึกรูปภาพสำเร็จ!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
+    © Lifestyle Lab. แบบสอบถามสำหรับกิจกรรมสัมนา
+  </footer>
+
+  <script>
+    // --- 1. ข้อมูลคำถามและตัวเลือก (6 ข้อ) ---
+    const quizQuestions = [
+      {
+        id: 1,
+        tag: "สถานการณ์ที่ 1: วันพักผ่อน",
+        title: "เมื่อมีวันหยุด 1 วันที่ไม่มีตารางนัดหมายใดๆ คุณมักจะเลือกทำสิ่งไหน?",
+        options: [
+          { text: "หาคาเฟ่สวยๆ นั่งอ่านหนังสือ หรือลองทำโปรเจกต์ใหม่ที่อยากทำ", archetype: "CREATIVE" },
+          { text: "วางแผนจัดการห้อง จัดตารางชีวิตสัปดาห์หน้า หรือทำงานค้างให้เสร็จ", archetype: "STRATEGIST" },
+          { text: "นัดแก๊งเพื่อนไปเที่ยวข้างนอก ปาร์ตี้ หรือทำกิจกรรมกลางแจ้ง", archetype: "SPARK" },
+          { text: "นอนพักผ่อน ฟังเพลย์ลิสต์สบายๆ หรือคุยโทรศัพท์กับคนรู้ใจ", archetype: "HARMONIZER" }
+        ]
+      },
+      {
+        id: 2,
+        tag: "สถานการณ์ที่ 2: การแก้ปัญหา",
+        title: "เมื่อเจอปัญหาไม่คาดฝันในโปรเจกต์ สิ่งแรกที่คุณมักทำคืออะไร?",
+        options: [
+          { text: "คิดนอกกรอบ หาทางออกใหม่ๆ ที่ไม่มีใครเคยทำมาก่อน", archetype: "CREATIVE" },
+          { text: "วิเคราะห์สาเหตุ แยกย่อยข้อมูล และวางแผนแก้ปัญหาอย่างเป็นระบบ", archetype: "STRATEGIST" },
+          { text: "ลุยแก้ไขทันที ปรับเปลี่ยนตามหน้างานด้วยความรวดเร็ว", archetype: "SPARK" },
+          { text: "คุยกับทุกคนในทีมเพื่อสร้างความเข้าใจและช่วยกันประคองอารมณ์", archetype: "HARMONIZER" }
+        ]
+      },
+      {
+        id: 3,
+        tag: "สถานการณ์ที่ 3: บรรยากาศโต๊ะทำงาน",
+        title: "หากเปิดดูโต๊ะทำงานหรือหน้าจอคอมพิวเตอร์ของคุณ สภาพมักจะเป็นอย่างไร?",
+        options: [
+          { text: "เต็มไปด้วย Moodboard กระดาษโน้ตไอเดีย และของสะสมที่มีเอกลักษณ์", archetype: "CREATIVE" },
+          { text: "เป็นระเบียบ เรียบร้อย มีโฟลเดอร์แยกชัดเจนและ To-do list ครบถ้วน", archetype: "STRATEGIST" },
+          { text: "มีของหลากหลายชิ้นพร้อมหยิบใช้ มีสติ๊กเกอร์สีสันสดใส และขนมของว่าง", archetype: "SPARK" },
+          { text: "มีต้นไม้เล็กๆ รูปภาพความทรงจำ หรือแก้วน้ำมินิมอลสบายตา", archetype: "HARMONIZER" }
+        ]
+      },
+      {
+        id: 4,
+        tag: "สถานการณ์ที่ 4: การทำงานกลุ่ม",
+        title: "ในบทบาทการทำงานกลุ่ม คุณมักจะเป็นบุคคลแบบใดโดยธรรมชาติ?",
+        options: [
+          { text: "ผู้เสนอไอเดียและสร้างคอนเซ็ปต์ใหม่ๆ ให้กับทีม", archetype: "CREATIVE" },
+          { text: "ผู้วางไทม์ไลน์ ตรวจสอบความถูกต้อง และควบคุมทิศทาง", archetype: "STRATEGIST" },
+          { text: "ผู้สร้างบรรยากาศให้กระตือรือร้นและกระตุ้นให้ทุกคนเริ่มลงมือทำ", archetype: "SPARK" },
+          { text: "ผู้รับฟัง ปรับความเข้าใจ และประสานรอยต่อให้ทุกคนทำงานราบรื่น", archetype: "HARMONIZER" }
+        ]
+      },
+      {
+        id: 5,
+        tag: "สถานการณ์ที่ 5: การเลือกเครื่องดื่ม",
+        title: "เครื่องดื่มที่บ่งบอกความรู้สึกของคุณได้ดีที่สุดในเวลาที่ต้องการรีเฟรช?",
+        options: [
+          { text: "Cold Brew ผสมผลไม้รสชาติซับซ้อนและแปลกใหม่", archetype: "CREATIVE" },
+          { text: "Americano ไม่หวาน เข้มข้น ตรงไปตรงมา", archetype: "STRATEGIST" },
+          { text: "Matcha Latte หรือ Italian Soda สีสันสดใส ชุ่มฉ่ำ", archetype: "SPARK" },
+          { text: "ชาร้อนกลิ่นคาโมมายล์ หรือ นมสดอุ่นๆ ละมุนใจ", archetype: "HARMONIZER" }
+        ]
+      },
+      {
+        id: 6,
+        tag: "สถานการณ์ที่ 6: คติประจำใจ",
+        title: "คำพูดใดที่ตรงกับทัศนคติการใช้ชีวิตของคุณมากที่สุด?",
+        options: [
+          { text: "“ความสนุกที่สุดคือการได้สร้างสรรค์สิ่งที่ไม่เคยมีอยู่จริง”", archetype: "CREATIVE" },
+          { text: "“ความสำเร็จที่ยั่งยืนเริ่มต้นจากการวางแผนและลงมือทำอย่างแม่นยำ”", archetype: "STRATEGIST" },
+          { text: "“ชีวิตคือการผจญภัย อย่ากลัวที่จะลองและเต็มที่กับทุกจังหวะ”", archetype: "SPARK" },
+          { text: "“ความสุขที่แท้จริงคือความสงบในใจและความสัมพันธ์ที่จริงใจ”", archetype: "HARMONIZER" }
+        ]
+      }
+    ];
+
+    // --- 2. ข้อมูลผลลัพธ์ (4 รูปแบบ Archetypes) ---
+    const archetypes = {
+      CREATIVE: {
+        code: "CREATIVE",
+        emoji: "💡",
+        typeEn: "THE CREATIVE VISIONARY",
+        titleTh: "นักสร้างสรรค์ผู้จุดประกาย",
+        description: "คุณเป็นคนที่มีจินตนาการกว้างไกล มีความสุขกับการสร้างสิ่งใหม่ๆ มองเห็นความเชื่อมโยงในสิ่งที่คนอื่นนึกไม่ถึง และมักเป็นผู้นำพาไอเดียสดใหม่มาสู่คนรอบข้างเสมอ",
+        tags: ["#คิดนอกกรอบ", "#ไอเดียพุ่งพล่าน", "#รักอิสระ", "#มีสไตล์เฉพาะตัว"],
+        stat1: { name: "จินตนาการ & ไอเดียสร้างสรรค์", value: 96 },
+        stat2: { name: "ความยืดหยุ่นและการปรับตัว", value: 88 },
+        match: "นักวางแผนสุขุมรอบคอบ",
+        tip: "หาเวลาจดบันทึกไอเดียก่อนที่มันจะลอยหายไป",
+        themeColor: "indigo",
+        accentBg: "bg-purple-400"
+      },
+      STRATEGIST: {
+        code: "STRATEGIST",
+        emoji: "♟️",
+        typeEn: "THE CALM STRATEGIST",
+        titleTh: "นักวางแผนสุขุมรอบคอบ",
+        description: "คุณเป็นคนมีตรรกะ มีความสามารถในการวิเคราะห์สถานการณ์ได้อย่างเฉียบคม จัดการทุกอย่างเป็นระบบ มองการณ์ไกล และเป็นที่พึ่งพาที่มั่นคงที่สุดของคนในทีม",
+        tags: ["#วางแผนแม่นยำ", "#มีเหตุผล", "#แก้ปัญหาเก่ง", "#มีระบบระเบียบ"],
+        stat1: { name: "การคิดวิเคราะห์เชิงตรรกะ", value: 98 },
+        stat2: { name: "การโฟกัสและมีเป้าหมาย", value: 92 },
+        match: "นักสร้างสรรค์ผู้จุดประกาย",
+        tip: "อนุญาตให้ตัวเองได้พักและปล่อยวางความสมบูรณ์แบบบ้าง",
+        themeColor: "blue",
+        accentBg: "bg-blue-400"
+      },
+      SPARK: {
+        code: "SPARK",
+        emoji: "⚡",
+        typeEn: "THE ENERGETIC SPARK",
+        titleTh: "สายลุยเปี่ยมพลังความสนุก",
+        description: "คุณเป็นคนที่เปี่ยมไปด้วยพลังบวก ความกระตือรือร้น และความกล้าที่จะลงมือทำ เข้ากับคนง่าย สร้างรอยยิ้มและบรรยากาศที่สนุกสนานให้ทุกพื้นที่ที่คุณอยู่",
+        tags: ["#พลังงานเหลือล้น", "#ลุยได้ทุกสถานการณ์", "#สร้างเสียงหัวเราะ", "#ใจกว้าง"],
+        stat1: { name: "ความกระตือรือร้นและพลังงาน", value: 95 },
+        stat2: { name: "ความกล้าตัดสินใจและลงมือทำ", value: 90 },
+        match: "ผู้เชื่อมโยงความอบอุ่น",
+        tip: "ลองหยุดพักสั้นๆ เพื่อชาร์จพลังก่อนเริ่มลุยโปรเจกต์ถัดไป",
+        themeColor: "amber",
+        accentBg: "bg-amber-400"
+      },
+      HARMONIZER: {
+        code: "HARMONIZER",
+        emoji: "🌿",
+        typeEn: "THE WARM HARMONIZER",
+        titleTh: "ผู้เชื่อมโยงความอบอุ่น",
+        description: "คุณเป็นคนที่มีความเข้าอกเข้าใจผู้อื่นสูง รับฟังอย่างใส่ใจ รักความสงบ และสร้างความสบายใจให้กับคนรอบข้าง เป็นเซฟโซนและพลังใจที่สำคัญของทุกคน",
+        tags: ["#ผู้ฟังที่ดี", "#เข้าอกเข้าใจ", "#รักความสงบ", "#เป็นที่พึ่งทางใจ"],
+        stat1: { name: "ความเข้าอกเข้าใจผู้อื่น (Empathy)", value: 97 },
+        stat2: { name: "การสร้างบรรยากาศที่ผ่อนคลาย", value: 94 },
+        match: "สายลุยเปี่ยมพลังความสนุก",
+        tip: "อย่าลืมดูแลความรู้สึกของตนเองก่อนดูแลผู้อื่นเสมอ",
+        themeColor: "emerald",
+        accentBg: "bg-emerald-400"
+      }
+    };
+
+    // --- State Management ---
+    let currentQuestionIndex = 0;
+    let scores = { CREATIVE: 0, STRATEGIST: 0, SPARK: 0, HARMONIZER: 0 };
+
+    // --- DOM Elements ---
+    const screenWelcome = document.getElementById("screen-welcome");
+    const screenQuiz = document.getElementById("screen-quiz");
+    const screenResult = document.getElementById("screen-result");
+
+    const questionCard = document.getElementById("question-card");
+    const questionTag = document.getElementById("question-tag");
+    const questionTitle = document.getElementById("question-title");
+    const optionsContainer = document.getElementById("options-container");
+    const quizProgressBar = document.getElementById("quiz-progress-bar");
+    const quizProgressText = document.getElementById("quiz-progress-text");
+
+    // --- Functions ---
+    function startQuiz() {
+      scores = { CREATIVE: 0, STRATEGIST: 0, SPARK: 0, HARMONIZER: 0 };
+      currentQuestionIndex = 0;
+
+      screenWelcome.classList.add("hidden");
+      screenResult.classList.add("hidden");
+      screenQuiz.classList.remove("hidden");
+      screenQuiz.classList.add("flex");
+
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = quizQuestions[currentQuestionIndex];
+      
+      // Update Question Info
+      questionTag.textContent = q.tag;
+      questionTitle.textContent = q.title;
+
+      // Update Progress
+      const progressPercent = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+      quizProgressBar.style.width = `${progressPercent}%`;
+      quizProgressText.textContent = `ข้อ ${currentQuestionIndex + 1} / ${quizQuestions.length}`;
+
+      // Reset & Render Option Buttons
+      optionsContainer.innerHTML = "";
+      
+      q.options.forEach((opt, index) => {
+        const btn = document.createElement("button");
+        btn.className = `option-card w-full text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-indigo-50/50 hover:border-indigo-300 transition-all duration-200 shadow-sm flex items-start gap-3 group`;
+        
+        const badge = document.createElement("span");
+        badge.className = "w-6 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 transition-colors";
+        badge.textContent = String.fromCharCode(65 + index); // A, B, C, D
+
+        const text = document.createElement("span");
+        text.className = "text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal";
+        text.textContent = opt.text;
+
+        btn.appendChild(badge);
+        btn.appendChild(text);
+
+        btn.onclick = () => selectOption(opt.archetype);
+        optionsContainer.appendChild(btn);
+      });
+
+      // Animate Question Entry
+      questionCard.classList.remove("fade-enter");
+      void questionCard.offsetWidth; // Trigger reflow
+      questionCard.classList.add("fade-enter");
+    }
+
+    function selectOption(archetype) {
+      scores[archetype] = (scores[archetype] || 0) + 1;
+
+      if (currentQuestionIndex < quizQuestions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      screenQuiz.classList.add("hidden");
+      screenQuiz.classList.remove("flex");
+      screenResult.classList.remove("hidden");
+      screenResult.classList.add("flex", "fade-enter");
+
+      // Calculate Winner Archetype
+      let highestScore = -1;
+      let winningArchetype = "CREATIVE";
+
+      for (const [type, score] of Object.entries(scores)) {
+        if (score > highestScore) {
+          highestScore = score;
+          winningArchetype = type;
+        }
+      }
+
+      const res = archetypes[winningArchetype];
+
+      // Populate Result Screen Elements
+      document.getElementById("result-type-en").textContent = res.typeEn;
+      document.getElementById("result-title-th").textContent = res.titleTh;
+      document.getElementById("result-description").textContent = res.description;
+
+      // Accent blob
+      const bgAccent = document.getElementById("result-bg-accent");
+      bgAccent.className = `absolute top-0 right-0 -mr-12 -mt-12 w-44 h-44 rounded-full opacity-30 blur-2xl ${res.accentBg}`;
+
+      // Tags
+      const tagsContainer = document.getElementById("result-tags");
+      tagsContainer.innerHTML = "";
+      res.tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "keyword-tag";
+        span.textContent = t;
+        tagsContainer.appendChild(span);
+      });
+
+      // Stats
+      document.getElementById("stat-1-name").textContent = res.stat1.name;
+      document.getElementById("stat-1-val").textContent = `${res.stat1.value}%`;
+      document.getElementById("stat-1-bar").style.width = `${res.stat1.value}%`;
+
+      document.getElementById("stat-2-name").textContent = res.stat2.name;
+      document.getElementById("stat-2-val").textContent = `${res.stat2.value}%`;
+      document.getElementById("stat-2-bar").style.width = `${res.stat2.value}%`;
+
+      // Compatibility & Tips
+      document.getElementById("result-match").textContent = res.match;
+      document.getElementById("result-tip").textContent = res.tip;
+    }
+
+    // --- 3. ฟังก์ชันดาวน์โหลดภาพการ์ดผลลัพธ์ (html2canvas) ---
+    async function downloadResultImage() {
+      const card = document.getElementById("result-card");
+      const btnDownloadText = document.getElementById("btn-download-text");
+      const btnDownload = document.getElementById("btn-download");
+
+      // Set Loading State
+      btnDownloadText.textContent = "กำลังสร้างรูปภาพ...";
+      btnDownload.disabled = true;
+
+      try {
+        // รอให้ Font ภาษาไทยเรนเดอร์สมบูรณ์ 100% ก่อนจับภาพ
+        if (document.fonts) {
+          await document.fonts.ready;
+        }
+
+        const cardWidth = card.getBoundingClientRect().width;
+
+        // Use html2canvas with exact clone dimensions
+        const canvas = await html2canvas(card, {
+          scale: 3, // ความละเอียดสูง คมชัด
+          useCORS: true,
+          backgroundColor: "#ffffff",
+          borderRadius: 24,
+          width: cardWidth,
+          onclone: (clonedDoc) => {
+            const clonedCard = clonedDoc.getElementById("result-card");
+            clonedCard.style.width = `${cardWidth}px`;
+            clonedCard.style.maxWidth = `${cardWidth}px`;
+            clonedCard.style.margin = "0";
+          }
+        });
+
+        const imageURI = canvas.toDataURL("image/png");
+        
+        // Trigger file download
+        const downloadLink = document.createElement("a");
+        downloadLink.download = `quiz-result-${Date.now()}.png`;
+        downloadLink.href = imageURI;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        // Reset Button
+        btnDownloadText.textContent = "บันทึกรูปภาพผลลัพธ์ (.PNG)";
+        btnDownload.disabled = false;
+
+        showToast("บันทึกรูปภาพผลลัพธ์สำเร็จแล้ว!");
+      } catch (err) {
+        console.error("Download image error: ", err);
+        btnDownloadText.textContent = "บันทึกรูปภาพผลลัพธ์ (.PNG)";
+        btnDownload.disabled = false;
+        showToast("ไม่สามารถสร้างรูปภาพได้ กรุณาลองใหม่อีกครั้ง");
+      }
+    }
+
+    function restartQuiz() {
+      screenResult.classList.add("hidden");
+      screenResult.classList.remove("flex");
+      screenWelcome.classList.remove("hidden");
+      screenWelcome.classList.add("fade-enter");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast-modal");
+      const toastMsg = document.getElementById("toast-message");
+      toastMsg.textContent = msg;
+      
+      toast.classList.remove("opacity-0", "pointer-events-none");
+      toast.classList.add("opacity-100");
+
+      setTimeout(() => {
+        toast.classList.remove("opacity-100");
+        toast.classList.add("opacity-0", "pointer-events-none");
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
