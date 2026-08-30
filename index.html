@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>แบบทดสอบค้นหาตัวตนของคุณ | Lifestyle Archetype Quiz</title>
+  <title>รู้ไหมใครโสด | Lifestyle Archetype Quiz</title>
   <!-- Google Fonts: Prompt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -144,7 +144,7 @@
 
   <!-- Header Bar -->
   <header class="relative z-10 w-full max-w-xl mx-auto px-4 py-4 flex items-center justify-center">
-    <span class="font-bold text-slate-800 text-sm tracking-wide">LIFESTYLE LAB</span>
+    <span class="font-bold text-slate-800 text-sm tracking-wide">รู้ไหมใครโสด</span>
   </header>
 
   <!-- Main Content Container -->
@@ -233,7 +233,7 @@
             <p class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Your Inner Energy</p>
             <p class="text-xs font-bold text-slate-800">ผลการวิเคราะห์บุคลิกภาพ</p>
           </div>
-          <span class="text-[11px] font-semibold text-slate-500 tracking-wider">LIFESTYLE LAB</span>
+          <span class="text-[11px] font-semibold text-slate-500 tracking-wider">รู้ไหมใครโสด</span>
         </div>
 
         <!-- Result Hero -->
@@ -268,6 +268,7 @@
 
       <!-- Action Buttons (Not included in image download) -->
       <div class="space-y-2.5">
+        <!-- ซ่อนปุ่มบันทึกรูปภาพชั่วคราว
         <button id="btn-download" onclick="downloadResultImage()"
           class="w-full py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-2xl shadow-lg shadow-slate-900/20 transition duration-200 flex items-center justify-center gap-2 active:scale-98">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -276,6 +277,7 @@
           </svg>
           <span id="btn-download-text">บันทึกรูปภาพผลลัพธ์</span>
         </button>
+        -->
 
         <button onclick="restartQuiz()"
           class="w-full py-3 px-6 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-medium rounded-2xl transition duration-200 flex items-center justify-center gap-2 active:scale-98 text-sm">
@@ -352,7 +354,7 @@
 
   <!-- Footer -->
   <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
-    © Lifestyle Lab. แบบสอบถามสำหรับกิจกรรมสัมนา v1.1
+    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.2
   </footer>
 
   <script>
@@ -395,87 +397,87 @@
       }
     }
 
-    // --- 1. ข้อมูลคำถามและตัวเลือก (9 ข้อ) ---
+    // --- 1. ข้อมูลคำถามและตัวเลือก (10 ข้อ) ---
     const quizQuestions = [
       {
         id: 1,
-        tag: "ข้อ 1/9",
+        tag: "ข้อ 1/10",
         title: "เวลามีคนชวนออกเดตครั้งแรก คุณ...",
         options: [
           { text: "กังวลล่วงหน้าไปหมดว่าจะพูดอะไรผิดหรือเปล่า", choice: "ก" },
-          { text: "รู้สึกเหนื่อยล่วงหน้าเวลาต้องเจอคนใหม่ ชอบอยู่กับตัวเองมากกว่า", choice: "ข" },
-          { text: "ตื่นเต้นอยากรู้ว่าจะได้เจอโลกใหม่ๆ ผ่านคนคนนี้ไหม", choice: "ค" },
-          { text: "เตรียมตัวและวางแผนไว้ล่วงหน้าหมดแล้วว่าจะทำยังไง", choice: "ง" },
+          { text: "รู้สึกเหนื่อยล่วงหน้าเวลาต้องเจอคนใหม่<br>ชอบอยู่กับตัวเองมากกว่า", choice: "ข" },
+          { text: "ตื่นเต้นอยากรู้ว่าจะได้เจอโลกใหม่ๆ<br>ผ่านคนคนนี้ไหม", choice: "ค" },
+          { text: "เตรียมตัวและวางแผนไว้ล่วงหน้าหมดแล้ว<br>ว่าจะทำยังไง", choice: "ง" },
           { text: "คิดในใจไว้ก่อนว่าถ้าคุยกันไม่ตรงจุด ก็ไม่ฝืนต่อ", choice: "จ" }
         ]
       },
       {
         id: 2,
-        tag: "ข้อ 2/9",
+        tag: "ข้อ 2/10",
         title: "มาตรฐานการเลือกคนที่จะคบ คุณมักจะ...",
         options: [
           { text: "กลัวเลือกผิดจนไม่กล้าตัดสินใจ", choice: "ก" },
           { text: "ไม่รีบหา เพราะไม่ได้รู้สึกขาดคนคุยด้วยอยู่แล้ว", choice: "ข" },
-          { text: "อยากได้คนที่คิดต่าง ท้าทายมุมมองเดิมๆ ของตัวเอง", choice: "ค" },
+          { text: "อยากได้คนที่คิดต่าง<br>ท้าทายมุมมองเดิมของตัวเอง", choice: "ค" },
           { text: "มีเช็กลิสต์ชัดเจนในใจ ถ้าไม่ครบก็ยังไม่ใช่", choice: "ง" },
-          { text: "ต้องเป็นตัวของตัวเองได้เต็มที่ ไม่ต้องเกรงใจกัน", choice: "จ" }
+          { text: "ต้องเป็นตัวของตัวเองได้เต็มที่<br>ไม่ต้องเกรงใจกัน", choice: "จ" }
         ]
       },
       {
         id: 3,
-        tag: "ข้อ 3/9",
+        tag: "ข้อ 3/10",
         title: "เมื่อพูดถึง \"เวลาว่าง\" ของคุณตอนนี้...",
         options: [
           { text: "มักถูกความคิดกังวลเรื่องความสัมพันธ์แทรกเข้ามาบ่อยๆ", choice: "ก" },
           { text: "ใช้ชาร์จพลังคนเดียว และรู้สึกพอใจกับมันมาก", choice: "ข" },
-          { text: "เต็มไปด้วยงานอดิเรกและความสนใจใหม่ๆ ที่อยากลอง", choice: "ค" },
+          { text: "เต็มไปด้วยงานอดิเรกและความสนใจใหม่ๆ<br>ที่อยากลอง", choice: "ค" },
           { text: "วางแผนไว้ล่วงหน้าเพื่อพัฒนาตัวเองหรือทำงาน", choice: "ง" },
-          { text: "ใช้ตามใจตัวเองเต็มที่ ไม่ต้องประนีประนอมกับใคร", choice: "จ" }
+          { text: "ใช้ตามใจตัวเอง ไม่ต้องประนีประนอมกับใคร", choice: "จ" }
         ]
       },
       {
         id: 4,
-        tag: "ข้อ 4/9",
+        tag: "ข้อ 4/10",
         title: "คนรอบตัวมักบอกว่าคุณเป็นคนแบบไหนในเรื่องความรัก",
         options: [
           { text: "อ่อนไหว คิดมาก กังวลง่าย", choice: "ก" },
           { text: "เข้าถึงยาก ไม่ค่อยเปิดตัวเรื่องหัวใจ", choice: "ข" },
-          { text: "มีไอเดียแปลกใหม่ ไม่ชอบกรอบความสัมพันธ์แบบเดิมๆ", choice: "ค" },
+          { text: "มีไอเดียแปลกใหม่<br>ไม่ชอบกรอบความสัมพันธ์แบบเดิมๆ", choice: "ค" },
           { text: "จริงจัง มีมาตรฐาน วางแผนทุกอย่าง", choice: "ง" },
           { text: "ตรงไปตรงมา ไม่ยอมง่ายๆ แม้ในเรื่องหัวใจ", choice: "จ" }
         ]
       },
       {
         id: 5,
-        tag: "ข้อ 5/9",
+        tag: "ข้อ 5/10",
         title: "สิ่งที่ทำให้คุณลังเลจะเริ่มความสัมพันธ์ใหม่มากที่สุดคือ",
         options: [
           { text: "กลัวผิดหวังหรือถูกทำร้ายจิตใจซ้ำ", choice: "ก" },
-          { text: "ไม่อยากเสียพลังงานไปกับการต้องปรับตัวเข้าหาใคร", choice: "ข" },
+          { text: "ไม่อยากเสียพลังงานไปกับการปรับตัวเข้าหาใคร", choice: "ข" },
           { text: "กลัวว่าความสัมพันธ์จะจำกัดอิสระในการใช้ชีวิต", choice: "ค" },
           { text: "ยังไม่เจอใครที่ตรงตามที่วางแผนไว้ในชีวิต", choice: "ง" },
-          { text: "ไม่อยากต้องยอมคนอื่นบ่อยๆ เพื่อรักษาความสัมพันธ์", choice: "จ" }
+          { text: "ไม่อยากต้องยอมคนอื่นบ่อยๆ<br>เพื่อรักษาความสัมพันธ์", choice: "จ" }
         ]
       },
       {
         id: 6,
-        tag: "ข้อ 6/9",
+        tag: "ข้อ 6/10",
         title: "เวลาคุยกับใครแล้วความเห็นไม่ตรงกัน คุณมักจะ...",
         options: [
           { text: "กังวลว่าอีกฝ่ายจะโกรธหรือหมดใจไปเลย", choice: "ก" },
           { text: "เงียบและถอยออกจากบทสนทนา ไม่อยากปะทะ", choice: "ข" },
-          { text: "สนุกกับการถกเถียง มองว่าเป็นมุมมองใหม่ที่น่าสนใจ", choice: "ค" },
-          { text: "อธิบายเหตุผลอย่างมีระบบ ยึดตามหลักการที่วางไว้", choice: "ง" },
+          { text: "สนุกกับการถกเถียง<br>มองว่าเป็นมุมมองใหม่ที่น่าสนใจ", choice: "ค" },
+          { text: "อธิบายเหตุผลอย่างมีระบบ<br>ยึดตามหลักการที่วางไว้", choice: "ง" },
           { text: "ยืนยันความเห็นตัวเองตรงๆ ไม่ค่อยยอมง่ายๆ", choice: "จ" }
         ]
       },
       {
         id: 7,
-        tag: "ข้อ 7/9",
+        tag: "ข้อ 7/10",
         title: "ถ้าให้จินตนาการชีวิตอีก 5 ปีข้างหน้า คุณเห็นตัวเองแบบไหน",
         options: [
           { text: "กังวลไปก่อนว่าจะยังไม่มีใครอยู่ข้างๆ", choice: "ก" },
-          { text: "ใช้ชีวิตเงียบสงบตามจังหวะของตัวเอง มีหรือไม่มีคู่ก็ได้", choice: "ข" },
+          { text: "ใช้ชีวิตเงียบสงบตามจังหวะของตัวเอง<br>มีหรือไม่มีคู่ก็ได้", choice: "ข" },
           { text: "ได้ลองอะไรใหม่ๆ เยอะ ไม่ผูกกับแผนเดิม", choice: "ค" },
           { text: "มีเป้าหมายชัดเจน ทำตามขั้นตอนที่วางไว้", choice: "ง" },
           { text: "เป็นตัวของตัวเองเต็มที่ ไม่ต้องปรับตามใครมาก", choice: "จ" }
@@ -483,26 +485,38 @@
       },
       {
         id: 8,
-        tag: "ข้อ 8/9",
+        tag: "ข้อ 8/10",
         title: "เหตุผลลึกๆ ที่ทำให้ตอนนี้คุณยังโสดคือ...",
         options: [
           { text: "กลัวว่าจะเจ็บปวดถ้าเปิดใจแล้วผิดหวังอีก", choice: "ก" },
-          { text: "ยังไม่รู้สึกว่าจำเป็นต้องมีใครมาเติมเต็ม อยู่คนเดียวก็โอเค", choice: "ข" },
+          { text: "ยังไม่รู้สึกว่าจำเป็นต้องมีใครมาเติมเต็ม<br>อยู่คนเดียวก็โอเค", choice: "ข" },
           { text: "ยังอยากค้นหาตัวเองและโลกให้มากกว่านี้ก่อน", choice: "ค" },
           { text: "ยังไม่เจอคนที่ผ่านมาตรฐานที่ตั้งไว้", choice: "ง" },
-          { text: "ไม่อยากประนีประนอมกับใครเพื่อให้ความสัมพันธ์ไปต่อ", choice: "จ" }
+          { text: "ไม่อยากประนีประนอมกับใคร<br>เพื่อให้ความสัมพันธ์ไปต่อ", choice: "จ" }
         ]
       },
       {
         id: 9,
-        tag: "ข้อ 9/9",
+        tag: "ข้อ 9/10",
         title: "เวลาเห็นเพื่อนรอบตัวทยอยเปิดตัวแฟน หรือแต่งงานกันไปหมด คุณมักจะรู้สึกหรือทำอย่างไร?",
         options: [
           { text: "แอบกังวลลึกๆ ว่าตัวเองจะถูกทิ้งให้อยู่คนเดียว หรือกลัวว่าจะหาคู่ไม่ได้", choice: "ก" },
-          { text: "ยินดีด้วยนะ แต่ก็รู้สึกสบายใจที่ตัวเองยังได้ใช้ชีวิตสงบๆ ไม่ต้องวุ่นวายเอาใจใคร", choice: "ข" },
-          { text: "รู้สึกว่าชีวิตคู่แบบดั้งเดิมอาจไม่ใช่คำตอบเดียว ยังมีประสบการณ์อื่นในชีวิตให้ค้นหาอีกเยอะ", choice: "ค" },
+          { text: "ยินดีด้วยนะ แต่ก็รู้สึกสบายใจที่ตัวเองยังได้ใช้<br>ชีวิตสงบๆไม่ต้องวุ่นวายเอาใจใคร", choice: "ข" },
+          { text: "รู้สึกว่าชีวิตคู่แบบดั้งเดิมอาจไม่ใช่คำตอบเดียว<br>ยังมีประสบการณ์อื่นในชีวิตให้ค้นหาอีกเยอะ", choice: "ค" },
           { text: "กลับมาทบทวนแผนชีวิตและมาตรฐานของตัวเองอย่างจริงจังว่าเราควรต้องปรับแผนตรงไหน", choice: "ง" },
           { text: "ยินดีด้วย แต่ถ้าต้องยอมฝืนเปลี่ยนตัวเองเยอะเพื่อให้มีคู่แบบนั้น ขอเป็นโสดดีกว่า", choice: "จ" }
+        ]
+      },
+      {
+        id: 10,
+        tag: "ข้อ 10/10",
+        title: "หากต้องสรุปเพียงข้อเดียว... \"กำแพง\" ที่สูงและแข็งแกร่งที่สุดที่ทำให้คุณเลือกที่จะเป็นโสดจนถึงทุกวันนี้ คืออะไร?",
+        options: [
+          { text: "ไม่พร้อมเสี่ยงกับความเจ็บปวด<br>การถูกหักหลังหรือความผิดหวังซ้ำรอยอีกต่อไป", choice: "ก" },
+          { text: "เซฟโซนที่ได้อยู่กับตัวเองโดยไม่ต้องเหนื่อย<br>หรือเอาพลังงานไปวุ่นวายกับใคร", choice: "ข" },
+          { text: "โอกาสที่จะได้ทำตามใจ ออกเดินทาง<br>หรือค้นหาสิ่งใหม่ๆ โดยไม่มีใครมาเป็นบ่วงผูกมัด", choice: "ค" },
+          { text: "แผนชีวิตที่วางไว้อย่างดี ซึ่งรู้สึกว่าไม่คุ้มที่จะลดสเปกลงมาเพื่อคนที่ยังไม่ใช่ที่สุด", choice: "ง" },
+          { text: "จุดยืนและตัวตนที่ชัดเจน ซึ่งไม่อยากจะฝืนเปลี่ยนหรือยอมจำนนเพื่อเอาใจใคร", choice: "จ" }
         ]
       }
     ];
@@ -566,8 +580,8 @@
         badge.textContent = thaiBadges[index] || opt.choice;
 
         const text = document.createElement("span");
-        text.className = "option-text text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal transition-colors";
-        text.textContent = opt.text;
+        text.className = "option-text text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal transition-colors block";
+        text.innerHTML = opt.text.replace(/\n/g, "<br>");
 
         btn.appendChild(badge);
         btn.appendChild(text);
@@ -687,7 +701,7 @@
       screenResult.classList.add("flex", "fade-enter");
 
       // Weighted Scoring: กำหนดน้ำหนักคะแนนตามข้อ (ข้อท้ายๆ จะมีน้ำหนักสูงขึ้นเพื่อลดโอกาสคะแนนเท่ากัน)
-      const questionWeights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.05, 1.10, 1.15, 1.20];
+      const questionWeights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.05, 1.10, 1.15, 1.20, 1.25];
 
       // Count scores for ก, ข, ค, ง, จ
       const counts = { ก: 0, ข: 0, ค: 0, ง: 0, จ: 0 };
