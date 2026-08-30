@@ -140,7 +140,7 @@
     <div id="screen-welcome"
       class="intro-fade-enter bg-white/80 backdrop-blur-xl border border-white/60 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 text-center flex flex-col justify-between min-h-[280px]">
       <div class="my-auto py-6">
-        <h1 id="intro-title" class="text-2xl sm:text-3xl font-bold text-slate-900 leading-snug">
+        <h1 id="intro-title" class="text-xl sm:text-2xl font-bold text-slate-900 leading-snug whitespace-nowrap">
           อยากเป็นคนโปรดแต่ดันโสดซะงั้น
         </h1>
       </div>
@@ -158,11 +158,11 @@
         class="bg-white/80 backdrop-blur border border-white/60 rounded-2xl px-5 py-3.5 shadow-sm flex flex-col gap-2">
         <div class="flex justify-between items-center text-xs font-medium text-slate-500">
           <span>ความคืบหน้า</span>
-          <span id="quiz-progress-text" class="font-bold text-quiz-green">ข้อ 1 / 8</span>
+          <span id="quiz-progress-text" class="font-bold text-quiz-green">ข้อ 1 / 9</span>
         </div>
         <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
           <div id="quiz-progress-bar" class="bg-quiz-green h-full rounded-full transition-all duration-300 ease-out"
-            style="width: 12.5%"></div>
+            style="width: 11.11%"></div>
         </div>
       </div>
 
@@ -327,11 +327,11 @@
       }
     }
 
-    // --- 1. ข้อมูลคำถามและตัวเลือก (8 ข้อ) ---
+    // --- 1. ข้อมูลคำถามและตัวเลือก (9 ข้อ) ---
     const quizQuestions = [
       {
         id: 1,
-        tag: "ข้อ 1/8",
+        tag: "ข้อ 1/9",
         title: "เวลามีคนชวนออกเดตครั้งแรก คุณ...",
         options: [
           { text: "กังวลล่วงหน้าไปหมดว่าจะพูดอะไรผิดหรือเปล่า", choice: "ก" },
@@ -343,7 +343,7 @@
       },
       {
         id: 2,
-        tag: "ข้อ 2/8",
+        tag: "ข้อ 2/9",
         title: "มาตรฐานการเลือกคนที่จะคบ คุณมักจะ...",
         options: [
           { text: "กลัวเลือกผิดจนไม่กล้าตัดสินใจ", choice: "ก" },
@@ -355,7 +355,7 @@
       },
       {
         id: 3,
-        tag: "ข้อ 3/8",
+        tag: "ข้อ 3/9",
         title: "เมื่อพูดถึง \"เวลาว่าง\" ของคุณตอนนี้...",
         options: [
           { text: "มักถูกความคิดกังวลเรื่องความสัมพันธ์แทรกเข้ามาบ่อยๆ", choice: "ก" },
@@ -367,7 +367,7 @@
       },
       {
         id: 4,
-        tag: "ข้อ 4/8",
+        tag: "ข้อ 4/9",
         title: "คนรอบตัวมักบอกว่าคุณเป็นคนแบบไหนในเรื่องความรัก",
         options: [
           { text: "อ่อนไหว คิดมาก กังวลง่าย", choice: "ก" },
@@ -379,7 +379,7 @@
       },
       {
         id: 5,
-        tag: "ข้อ 5/8",
+        tag: "ข้อ 5/9",
         title: "สิ่งที่ทำให้คุณลังเลจะเริ่มความสัมพันธ์ใหม่มากที่สุดคือ",
         options: [
           { text: "กลัวผิดหวังหรือถูกทำร้ายจิตใจซ้ำ", choice: "ก" },
@@ -391,7 +391,7 @@
       },
       {
         id: 6,
-        tag: "ข้อ 6/8",
+        tag: "ข้อ 6/9",
         title: "เวลาคุยกับใครแล้วความเห็นไม่ตรงกัน คุณมักจะ...",
         options: [
           { text: "กังวลว่าอีกฝ่ายจะโกรธหรือหมดใจไปเลย", choice: "ก" },
@@ -403,7 +403,7 @@
       },
       {
         id: 7,
-        tag: "ข้อ 7/8",
+        tag: "ข้อ 7/9",
         title: "ถ้าให้จินตนาการชีวิตอีก 5 ปีข้างหน้า คุณเห็นตัวเองแบบไหน",
         options: [
           { text: "กังวลไปก่อนว่าจะยังไม่มีใครอยู่ข้างๆ", choice: "ก" },
@@ -415,7 +415,7 @@
       },
       {
         id: 8,
-        tag: "ข้อ 8/8",
+        tag: "ข้อ 8/9",
         title: "เหตุผลลึกๆ ที่ทำให้ตอนนี้คุณยังโสดคือ...",
         options: [
           { text: "กลัวว่าจะเจ็บปวดถ้าเปิดใจแล้วผิดหวังอีก", choice: "ก" },
@@ -423,6 +423,18 @@
           { text: "ยังอยากค้นหาตัวเองและโลกให้มากกว่านี้ก่อน", choice: "ค" },
           { text: "ยังไม่เจอคนที่ผ่านมาตรฐานที่ตั้งไว้", choice: "ง" },
           { text: "ไม่อยากประนีประนอมกับใครเพื่อให้ความสัมพันธ์ไปต่อ", choice: "จ" }
+        ]
+      },
+      {
+        id: 9,
+        tag: "ข้อ 9/9",
+        title: "เวลาเห็นเพื่อนรอบตัวทยอยเปิดตัวแฟน หรือแต่งงานกันไปหมด คุณมักจะรู้สึกหรือทำอย่างไร?",
+        options: [
+          { text: "แอบกังวลลึกๆ ว่าตัวเองจะถูกทิ้งให้อยู่คนเดียว หรือกลัวว่าจะหาคู่ไม่ได้", choice: "ก" },
+          { text: "ยินดีด้วยนะ แต่ก็รู้สึกสบายใจที่ตัวเองยังได้ใช้ชีวิตสงบๆ ไม่ต้องวุ่นวายเอาใจใคร", choice: "ข" },
+          { text: "รู้สึกว่าชีวิตคู่แบบดั้งเดิมอาจไม่ใช่คำตอบเดียว ยังมีประสบการณ์อื่นในชีวิตให้ค้นหาอีกเยอะ", choice: "ค" },
+          { text: "กลับมาทบทวนแผนชีวิตและมาตรฐานของตัวเองอย่างจริงจังว่าเราควรต้องปรับแผนตรงไหน", choice: "ง" },
+          { text: "ยินดีด้วย แต่ถ้าต้องยอมฝืนเปลี่ยนตัวเองเยอะเพื่อให้มีคู่แบบนั้น ขอเป็นโสดดีกว่า", choice: "จ" }
         ]
       }
     ];
@@ -606,11 +618,15 @@
       screenResult.classList.remove("hidden");
       screenResult.classList.add("flex", "fade-enter");
 
+      // Weighted Scoring: กำหนดน้ำหนักคะแนนตามข้อ (ข้อท้ายๆ จะมีน้ำหนักสูงขึ้นเพื่อลดโอกาสคะแนนเท่ากัน)
+      const questionWeights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.05, 1.10, 1.15, 1.20];
+
       // Count scores for ก, ข, ค, ง, จ
       const counts = { ก: 0, ข: 0, ค: 0, ง: 0, จ: 0 };
-      userAnswers.forEach((ans) => {
+      userAnswers.forEach((ans, index) => {
         if (ans && counts[ans] !== undefined) {
-          counts[ans]++;
+          const weight = questionWeights[index] || 1.0;
+          counts[ans] += weight;
         }
       });
 
@@ -622,8 +638,13 @@
         }
       }
 
-      // Check if there is a unique winner or tie
-      const winners = Object.keys(counts).filter((key) => counts[key] === maxScore);
+      // Filter winners with highest score (accounting for floating-point tolerance)
+      const winners = Object.keys(counts).filter((key) => Math.abs(counts[key] - maxScore) < 0.0001);
+
+      // Random fallback if there are multiple winners with identical highest score
+      const finalWinner = winners.length > 1
+        ? winners[Math.floor(Math.random() * winners.length)]
+        : (winners[0] || "ก");
 
       const titleEl = document.getElementById("result-title-th");
       const subtitleEl = document.getElementById("result-type-en");
@@ -632,8 +653,8 @@
       const emojiEl = document.getElementById("result-emoji");
       const bgAccent = document.getElementById("result-bg-accent");
 
-      if (winners.length === 1 && capyResults[winners[0]]) {
-        const res = capyResults[winners[0]];
+      if (finalWinner && capyResults[finalWinner]) {
+        const res = capyResults[finalWinner];
         if (titleEl) titleEl.textContent = res.title;
         if (subtitleEl) subtitleEl.textContent = res.subtitle;
         if (descEl) descEl.textContent = res.description;
@@ -646,17 +667,6 @@
           emojiEl.classList.remove("flex", "inline-flex");
         }
         if (bgAccent) bgAccent.className = `absolute top-0 right-0 -mr-12 -mt-12 w-44 h-44 rounded-full opacity-30 blur-2xl ${res.accentBg}`;
-      } else {
-        // Tie case
-        if (titleEl) titleEl.textContent = "ยังไม่ได้กำหนดค่า";
-        if (subtitleEl) subtitleEl.textContent = "ยังไม่ได้กำหนดค่า";
-        if (descEl) descEl.textContent = "ยังไม่ได้กำหนดค่า";
-        if (imgEl) imgEl.classList.add("hidden");
-        if (emojiEl) {
-          emojiEl.classList.remove("hidden");
-          emojiEl.classList.add("inline-flex");
-        }
-        if (bgAccent) bgAccent.className = `absolute top-0 right-0 -mr-12 -mt-12 w-44 h-44 rounded-full opacity-30 blur-2xl bg-slate-300`;
       }
     }
 
