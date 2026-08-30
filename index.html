@@ -66,11 +66,25 @@
     }
 
     /* โค้ดสีหลักหน้าคำถาม #66854E */
-    .bg-quiz-green { background-color: #66854E; }
-    .text-quiz-green { color: #66854E; }
-    .border-quiz-green { border-color: #66854E; }
-    .bg-quiz-green-light { background-color: rgba(102, 133, 78, 0.12); }
-    .ring-quiz-green { --tw-ring-color: rgba(102, 133, 78, 0.3); }
+    .bg-quiz-green {
+      background-color: #66854E;
+    }
+
+    .text-quiz-green {
+      color: #66854E;
+    }
+
+    .border-quiz-green {
+      border-color: #66854E;
+    }
+
+    .bg-quiz-green-light {
+      background-color: rgba(102, 133, 78, 0.12);
+    }
+
+    .ring-quiz-green {
+      --tw-ring-color: rgba(102, 133, 78, 0.3);
+    }
 
     /* สไตล์การ์ดตัวเลือก */
     .option-card:active {
@@ -239,7 +253,8 @@
             Jumpy Capy
           </h2>
           <p id="result-description" class="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xs mx-auto">
-            กลัวถูกทิ้ง กลัวผิดหวัง จนบางทีถอยหนีไปเองก่อนจะได้เริ่มรักใครซักคนจริงๆ อยู่เป็นโสดโดยไม่มีสาเหตุดีกว่าเป็นเศษ แล้วไม่มีความหมาย
+            กลัวถูกทิ้ง กลัวผิดหวัง จนบางทีถอยหนีไปเองก่อนจะได้เริ่มรักใครซักคนจริงๆ
+            อยู่เป็นโสดโดยไม่มีสาเหตุดีกว่าเป็นเศษ แล้วไม่มีความหมาย
           </p>
         </div>
 
@@ -281,7 +296,7 @@
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
     <div
       class="relative w-full max-w-sm bg-white rounded-3xl p-5 shadow-2xl transform scale-95 transition-all duration-300 flex flex-col items-center text-center max-h-[90vh] overflow-y-auto">
-      
+
       <!-- Close Button -->
       <button onclick="closeImagePreviewModal()"
         class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
@@ -299,12 +314,15 @@
 
       <h3 class="text-base font-semibold text-slate-800 mb-1">รูปภาพผลลัพธ์ของคุณ</h3>
       <p class="text-xs text-slate-500 mb-3">
-        แตะรูปภาพค้างไว้แล้วเลือก <span class="font-medium text-slate-700">"บันทึกรูปภาพ"</span> หรือ <span class="font-medium text-slate-700">"เพิ่มลงในแอปรูปภาพ"</span>
+        แตะรูปภาพค้างไว้แล้วเลือก <span class="font-medium text-slate-700">"บันทึกรูปภาพ"</span> หรือ <span
+          class="font-medium text-slate-700">"เพิ่มลงในแอปรูปภาพ"</span>
       </p>
 
       <!-- Preview Image Container -->
-      <div class="w-full bg-slate-50 rounded-2xl p-2 mb-4 border border-slate-100 overflow-hidden shadow-inner flex justify-center items-center">
-        <img id="preview-modal-img" src="" alt="Quiz Result" class="w-full h-auto max-h-[48vh] object-contain rounded-xl shadow-sm select-none pointer-events-auto" />
+      <div
+        class="w-full bg-slate-50 rounded-2xl p-2 mb-4 border border-slate-100 overflow-hidden shadow-inner flex justify-center items-center">
+        <img id="preview-modal-img" src="" alt="Quiz Result"
+          class="w-full h-auto max-h-[48vh] object-contain rounded-xl shadow-sm select-none pointer-events-auto" />
       </div>
 
       <!-- Action Buttons -->
@@ -334,7 +352,7 @@
 
   <!-- Footer -->
   <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
-    © Lifestyle Lab. แบบสอบถามสำหรับกิจกรรมสัมนา
+    © Lifestyle Lab. แบบสอบถามสำหรับกิจกรรมสัมนา v1.1
   </footer>
 
   <script>
