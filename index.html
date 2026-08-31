@@ -103,8 +103,10 @@
     .option-card {
       position: relative;
       display: flex !important;
+      align-items: center !important;
       width: 100% !important;
-      min-height: 48px;
+      min-height: 58px !important;
+      padding: 14px 16px !important;
       cursor: pointer !important;
       user-select: none;
       -webkit-user-select: none;
@@ -261,7 +263,8 @@
       <!-- ใช้ bg-white ทึบแทน backdrop-blur เพื่อป้องกัน touch event ถูกกินโดย blur compositing layer บน Safari/In-App browser -->
       <div id="question-card"
         class="fade-enter bg-white border border-slate-200/80 rounded-3xl p-4 sm:p-7 shadow-xl shadow-slate-200/50">
-        <div class="inline-block px-3 py-1 bg-quiz-green-light text-quiz-green font-semibold text-xs rounded-lg mb-2 sm:mb-3"
+        <div
+          class="inline-block px-3 py-1 bg-quiz-green-light text-quiz-green font-semibold text-xs rounded-lg mb-2 sm:mb-3"
           id="question-tag">
           สถานการณ์ที่ 1
         </div>
@@ -432,7 +435,7 @@
 
   <!-- Footer -->
   <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
-    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v2.0
+    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v2.1
   </footer>
 
   <script>
@@ -581,7 +584,7 @@
           { text: "ไม่พร้อมเสี่ยงกับความเจ็บปวด<br>การถูกหักหลังหรือความผิดหวังซ้ำรอยอีกต่อไป", choice: "ก" },
           { text: "เซฟโซนที่ได้อยู่กับตัวเองโดยไม่ต้องเหนื่อย<br>หรือเอาพลังงานไปวุ่นวายกับใคร", choice: "ข" },
           { text: "โอกาสที่จะได้ทำตามใจ ออกเดินทาง<br>หรือค้นหาสิ่งใหม่ๆ โดยไม่มีใครมาผูกมัด", choice: "ค" },
-          { text: "แผนชีวิตที่วางไว้อย่างดี ซึ่งรู้สึกว่าไม่คุ้มที่จะลดสเปก<br>ลงมาเพื่อคนที่ยังไม่ใช่ที่สุด", choice: "ง" },
+          { text: "แผนชีวิตที่วางไว้อย่างดี ซึ่งไม่คุ้มที่จะลดสเปก<br>ลงมาเพื่อคนที่ยังไม่ใช่ที่สุด", choice: "ง" },
           { text: "จุดยืนและตัวตนที่ชัดเจน ซึ่งไม่อยากจะฝืนเปลี่ยน<br>หรือยอมจำนนเพื่อเอาใจใคร", choice: "จ" }
         ]
       }
@@ -651,7 +654,7 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.dataset.choice = opt.choice;
-        btn.className = "option-card w-full select-none text-left p-3.5 sm:p-4 rounded-2xl border-2 border-slate-200 bg-white shadow-sm flex items-start gap-2.5 sm:gap-3";
+        btn.className = "option-card w-full select-none text-left p-3.5 sm:p-4 rounded-2xl border-2 border-slate-200 bg-white shadow-sm flex items-center gap-3";
 
         const badge = document.createElement("span");
         badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs shrink-0";
