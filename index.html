@@ -611,30 +611,47 @@
     const btnNext = document.getElementById("btn-next");
     const btnNextText = document.getElementById("btn-next-text");
 
-    // ✅ Event Delegation แบบสมบูรณ์: ทำงานครั้งเดียว ไม่ซ้ำซ้อน
-    optionsContainer.addEventListener("click", function (e) {
+    // ✅ Ultimate Event Catcher: ดัก Click ที่ Body เพื่อแก้ปัญหา WebView (LINE/FB) 
+    // ทำ Hit-test พังในช่วง Animation (opacity < 1) ทำให้กดแล้วทะลุไปโดน Background
+    document.body.addEventListener("click", function (e) {
+      // ถ้าหน้าควิซซ่อนอยู่ ไม่ต้องทำงาน (ป้องกันไปกระทบปุ่มหน้าอื่น)
+      if (screenQuiz.classList.contains("hidden")) return;
+
       let btn = e.target.closest(".option-card");
 
-      // หากคลิกโดนรอยต่อระหว่างปุ่ม (Gap) ให้ค้นหาปุ่มที่อยู่ใกล้จุดคลิกที่สุดทันที
+      // ถ้าระบบ Hit-test ปกติหาปุ่มไม่เจอ (กดร่อง หรือ โดนบั๊ก WebView ทะลุ)
       if (!btn) {
         const clickY = e.clientY;
-        if (clickY !== undefined && clickY !== 0) { // ป้องกันค่า clickY ผิดปกติ
-          const allBtns = optionsContainer.querySelectorAll(".option-card");
-          let closestDist = Infinity;
-          allBtns.forEach((b) => {
-            const rect = b.getBoundingClientRect();
-            // เช็คว่ากด "ข้างใน" ช่วง Y ของปุ่มพอดีหรือไม่ (เผื่อ error เล็กน้อย)
-            if (clickY >= rect.top && clickY <= rect.bottom) {
-              btn = b;
-              closestDist = 0;
-            } else {
-              const dist = Math.min(Math.abs(clickY - rect.top), Math.abs(clickY - rect.bottom));
-              if (dist < closestDist) {
-                closestDist = dist;
+        const clickX = e.clientX;
+        
+        if (clickY !== undefined && clickY !== 0) {
+          const containerRect = optionsContainer.getBoundingClientRect();
+          // เช็คว่าพิกัดที่นิ้วจิ้ม อยู่ในโซนของ optionsContainer หรือไม่ (บวกเผื่อขอบ 10px)
+          if (clickY >= containerRect.top - 10 && clickY <= containerRect.bottom + 10 &&
+              clickX >= containerRect.left - 20 && clickX <= containerRect.right + 20) {
+              
+            const allBtns = optionsContainer.querySelectorAll(".option-card");
+            let closestDist = Infinity;
+            
+            allBtns.forEach((b) => {
+              const rect = b.getBoundingClientRect();
+              
+              // ถ้านิ้วจิ้มอยู่ในกรอบ Y ของปุ่มนี้พอดี (แก้ปัญหาบั๊ก Hit-test ทะลุจางๆ)
+              if (clickY >= rect.top && clickY <= rect.bottom) {
                 btn = b;
+                closestDist = 0;
+              } 
+              // ถ้านิ้วจิ้มตกในร่อง (Gap) จริงๆ หาปุ่มที่ขอบใกล้สุด
+              else if (closestDist !== 0) {
+                const dist = Math.min(Math.abs(clickY - rect.top), Math.abs(clickY - rect.bottom));
+                // ใช้ <= แทน < เพื่อกระจายอคติให้ปุ่มล่างมีโอกาสชนะบ้างเวลาตกกึ่งกลางเป๊ะๆ (เช่น ร่อง ข-ค จะได้ ค)
+                if (dist <= closestDist) {
+                  closestDist = dist;
+                  btn = b;
+                }
               }
-            }
-          });
+            });
+          }
         }
       }
 
