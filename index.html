@@ -105,8 +105,8 @@
       display: flex !important;
       align-items: center !important;
       width: 100% !important;
-      min-height: 58px !important;
-      padding: 14px 16px !important;
+      min-height: 60px !important;
+      padding: 16px 18px !important;
       cursor: pointer !important;
       user-select: none;
       -webkit-user-select: none;
@@ -147,6 +147,7 @@
 
     #options-container {
       position: relative;
+      cursor: pointer !important;
     }
 
     /* ลดขนาดตัวอักษรตัวเลือกบนจอเล็กมาก */
@@ -435,7 +436,7 @@
 
   <!-- Footer -->
   <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
-    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v2.1
+    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v2.2
   </footer>
 
   <script>
@@ -609,9 +610,25 @@
     const btnNext = document.getElementById("btn-next");
     const btnNextText = document.getElementById("btn-next-text");
 
-    // ✅ Click Event Delegation: แม่นยำ 100% ทั้งบนคอม (เมาส์) และมือถือ (จอสัมผัส)
+    // ✅ 100% Zero-Dead-Zone Click Handler: ทุกพิกัดของกล่องตัวเลือกทำงานได้ 100%
     optionsContainer.addEventListener("click", function (e) {
-      const btn = e.target.closest(".option-card");
+      let btn = e.target.closest(".option-card");
+
+      // หากคลิกโดนรอยต่อระหว่างปุ่ม (Gap) ให้ค้นหาปุ่มที่อยู่ใกล้จุดคลิกที่สุดทันที
+      if (!btn) {
+        const clickY = e.clientY;
+        const allBtns = optionsContainer.querySelectorAll(".option-card");
+        let closestDist = Infinity;
+        allBtns.forEach((b) => {
+          const rect = b.getBoundingClientRect();
+          const dist = Math.min(Math.abs(clickY - rect.top), Math.abs(clickY - rect.bottom));
+          if (dist < closestDist) {
+            closestDist = dist;
+            btn = b;
+          }
+        });
+      }
+
       if (!btn || !btn.dataset.choice) return;
       selectOption(btn.dataset.choice);
     });
