@@ -44,10 +44,11 @@
       background-color: #ffffff;
     }
 
-    /* ทุกส่วนประกอบในปุ่มส่ง Event ไปที่ button เสมอ (คลิกโดนข้อความ/ไอคอน/พื้นที่ว่าง ก็ติด 100%) */
-    .option-card * {
+    /* ยกเลิก pointer-events: none เพราะทำให้เบราว์เซอร์บนมือถือ Drop Event ได้เวลาแตะตรงข้อความเป๊ะๆ 
+       เราใช้ e.target.closest(".option-card") ใน Event Delegation แทนแล้ว */
+    /* .option-card * {
       pointer-events: none !important;
-    }
+    } */
 
     /* หน้าคำถาม: animate เฉพาะ opacity ไม่ใช้ transform เพื่อไม่ให้ hit-test เพี้ยน */
     .fade-enter {
@@ -610,23 +611,31 @@
     const btnNext = document.getElementById("btn-next");
     const btnNextText = document.getElementById("btn-next-text");
 
-    // ✅ 100% Zero-Dead-Zone Click Handler: ทุกพิกัดของกล่องตัวเลือกทำงานได้ 100%
+    // ✅ Event Delegation แบบสมบูรณ์: ทำงานครั้งเดียว ไม่ซ้ำซ้อน
     optionsContainer.addEventListener("click", function (e) {
       let btn = e.target.closest(".option-card");
 
       // หากคลิกโดนรอยต่อระหว่างปุ่ม (Gap) ให้ค้นหาปุ่มที่อยู่ใกล้จุดคลิกที่สุดทันที
       if (!btn) {
         const clickY = e.clientY;
-        const allBtns = optionsContainer.querySelectorAll(".option-card");
-        let closestDist = Infinity;
-        allBtns.forEach((b) => {
-          const rect = b.getBoundingClientRect();
-          const dist = Math.min(Math.abs(clickY - rect.top), Math.abs(clickY - rect.bottom));
-          if (dist < closestDist) {
-            closestDist = dist;
-            btn = b;
-          }
-        });
+        if (clickY !== undefined && clickY !== 0) { // ป้องกันค่า clickY ผิดปกติ
+          const allBtns = optionsContainer.querySelectorAll(".option-card");
+          let closestDist = Infinity;
+          allBtns.forEach((b) => {
+            const rect = b.getBoundingClientRect();
+            // เช็คว่ากด "ข้างใน" ช่วง Y ของปุ่มพอดีหรือไม่ (เผื่อ error เล็กน้อย)
+            if (clickY >= rect.top && clickY <= rect.bottom) {
+              btn = b;
+              closestDist = 0;
+            } else {
+              const dist = Math.min(Math.abs(clickY - rect.top), Math.abs(clickY - rect.bottom));
+              if (dist < closestDist) {
+                closestDist = dist;
+                btn = b;
+              }
+            }
+          });
+        }
       }
 
       if (!btn || !btn.dataset.choice) return;
@@ -684,10 +693,8 @@
         btn.appendChild(badge);
         btn.appendChild(text);
 
-        // ✅ ผูก Native Click ตรงกับตัวปุ่ม: คลิกพื้นที่ว่างส่วนไหนของการ์ดก็ติด 100%
-        btn.onclick = function () {
-          selectOption(opt.choice);
-        };
+        // ลบ btn.onclick ออก เพราะตอนนี้เราจัดการ click event ที่ optionsContainer (Event Delegation) 
+        // อย่างสมบูรณ์แล้ว การใส่ตรงนี้เพิ่มจะทำให้เกิดการเรียกฟังก์ชันซ้ำซ้อนและอาจตีกันเอง
 
         optionsContainer.appendChild(btn);
       });
@@ -698,7 +705,14 @@
       if (animate) {
         questionCard.classList.remove("fade-enter");
         void questionCard.offsetWidth; // Trigger reflow
-        questionCard.classList.add("fade-enter");
+        
+        // ✅ ใช้ double requestAnimationFrame แก้บั๊ก hit-area เพี้ยนบน Mobile
+        // เพื่อบังคับให้ Browser Render Layout ของปุ่มใหม่ให้เสร็จ 100% ก่อนเริ่มทำ Animation
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            questionCard.classList.add("fade-enter");
+          });
+        });
       }
     }
 
