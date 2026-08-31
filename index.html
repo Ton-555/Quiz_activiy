@@ -232,7 +232,7 @@
   </header>
 
   <!-- Main Content Container -->
-  <main class="relative z-10 w-full max-w-md mx-auto px-4 flex-1 flex flex-col justify-start py-10">
+  <main class="relative z-10 w-full max-w-md mx-auto px-4 flex-1 flex flex-col justify-start py-2 sm:py-4">
 
     <!-- SCREEN 1: Welcome / Intro Sequence Screen -->
     <div id="screen-welcome"
@@ -439,7 +439,7 @@
 
   <!-- Footer -->
   <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
-    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.5
+    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.6
   </footer>
 
   <script>
@@ -612,8 +612,36 @@
     const btnPrev = document.getElementById("btn-prev");
     const btnNext = document.getElementById("btn-next");
     const btnNextText = document.getElementById("btn-next-text");
-    // ✅ Event Delegation: listener เดียวผูกครั้งเดียว — ไม่สร้าง/ทำลาย listener ทุกข้อ
+    // ✅ Ultra-Responsive FastTap Pointer Delegation (แก้ปัญหา Browser ตัด Click ทิ้งบนจอมือถือ 100%)
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let pointerStartTime = 0;
+    let lastSelectionTime = 0;
+
+    optionsContainer.addEventListener("pointerdown", function (e) {
+      pointerStartX = e.clientX;
+      pointerStartY = e.clientY;
+      pointerStartTime = Date.now();
+    }, { passive: true });
+
+    optionsContainer.addEventListener("pointerup", function (e) {
+      const dx = Math.abs(e.clientX - pointerStartX);
+      const dy = Math.abs(e.clientY - pointerStartY);
+      const dt = Date.now() - pointerStartTime;
+
+      // ถ้านิ้วขยับไม่เกิน 12px (ระยะกลิ้งของนิ้วโป้ง) และแตะเร็วกว่า 400ms = ตั้งใจแตะตัวเลือก
+      if (dx < 12 && dy < 12 && dt < 400) {
+        const btn = e.target.closest(".option-card");
+        if (btn && btn.dataset.choice) {
+          lastSelectionTime = Date.now();
+          selectOption(btn.dataset.choice);
+        }
+      }
+    });
+
+    // Fallback สำหรับ Mouse click / Desktop / Accessibility (ป้องกันการเลือกซ้ำซ้อน)
     optionsContainer.addEventListener("click", function (e) {
+      if (Date.now() - lastSelectionTime < 400) return;
       const btn = e.target.closest(".option-card");
       if (!btn || !btn.dataset.choice) return;
       selectOption(btn.dataset.choice);
