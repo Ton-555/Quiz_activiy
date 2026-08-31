@@ -267,22 +267,22 @@
       <!-- Question Card -->
       <!-- ใช้ bg-white ทึบแทน backdrop-blur เพื่อป้องกัน touch event ถูกกินโดย blur compositing layer บน Safari/In-App browser -->
       <div id="question-card"
-        class="fade-enter bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-7 shadow-xl shadow-slate-200/50">
-        <div class="inline-block px-3 py-1 bg-quiz-green-light text-quiz-green font-semibold text-xs rounded-lg mb-3"
+        class="fade-enter bg-white border border-slate-200/80 rounded-3xl p-4 sm:p-7 shadow-xl shadow-slate-200/50">
+        <div class="inline-block px-3 py-1 bg-quiz-green-light text-quiz-green font-semibold text-xs rounded-lg mb-2 sm:mb-3"
           id="question-tag">
           สถานการณ์ที่ 1
         </div>
-        <h2 id="question-title" class="text-lg sm:text-xl font-bold text-slate-900 mb-6 leading-relaxed">
+        <h2 id="question-title" class="text-base sm:text-xl font-bold text-slate-900 mb-3 sm:mb-6 leading-snug">
           คำถามกำลังโหลด...
         </h2>
 
         <!-- Options Container -->
-        <div id="options-container" class="space-y-3">
+        <div id="options-container" class="space-y-2.5 sm:space-y-3">
           <!-- Options will be injected by JavaScript -->
         </div>
 
         <!-- Navigation Buttons -->
-        <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
+        <div class="flex items-center gap-3 mt-4 pt-3 sm:mt-6 sm:pt-4 border-t border-slate-100">
           <button id="btn-prev" onclick="prevQuestion()" disabled
             class="w-1/2 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-2xl transition duration-200 flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:pointer-events-none text-sm active:scale-98">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -439,7 +439,7 @@
 
   <!-- Footer -->
   <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
-    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.6
+    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.7
   </footer>
 
   <script>
@@ -573,11 +573,11 @@
         tag: "ข้อ 8/9",
         title: "เวลาเห็นเพื่อนรอบตัวทยอยเปิดตัวแฟน หรือแต่งงานกันไปหมด คุณมักจะรู้สึกหรือทำอย่างไร?",
         options: [
-          { text: "แอบกังวลลึกๆ ว่าตัวเองจะถูกทิ้งให้อยู่คนเดียว หรือกลัวว่าจะหาคู่ไม่ได้", choice: "ก" },
-          { text: "ยินดีด้วยนะ แต่ก็รู้สึกสบายใจที่ตัวเองยังได้ใช้<br>ชีวิตสงบๆไม่ต้องวุ่นวายเอาใจใคร", choice: "ข" },
+          { text: "แอบกังวลลึกๆ ว่าตัวเองจะถูกทิ้งให้อยู่คนเดียว<br>หรือกลัวว่าจะหาคู่ไม่ได้", choice: "ก" },
+          { text: "ยินดีด้วยนะ แต่ก็รู้สึกสบายใจที่ตัวเองยังได้ใช้<br>ชีวิตสงบๆ ไม่ต้องวุ่นวายเอาใจใคร", choice: "ข" },
           { text: "รู้สึกว่าชีวิตคู่แบบดั้งเดิมอาจไม่ใช่คำตอบเดียว<br>ยังมีประสบการณ์อื่นในชีวิตให้ค้นหาอีกเยอะ", choice: "ค" },
-          { text: "กลับมาทบทวนแผนชีวิตและมาตรฐานของตัวเองอย่างจริงจังว่าเราควรต้องปรับแผนตรงไหน", choice: "ง" },
-          { text: "ยินดีด้วย แต่ถ้าต้องยอมฝืนเปลี่ยนตัวเองเยอะเพื่อให้มีคู่แบบนั้น ขอเป็นโสดดีกว่า", choice: "จ" }
+          { text: "กลับมาทบทวนแผนชีวิตและมาตรฐานตัวเอง<br>อย่างจริงจังว่าควรปรับตรงไหน", choice: "ง" },
+          { text: "ยินดีด้วย แต่ถ้าต้องยอมฝืนเปลี่ยนตัวเองเยอะ<br>เพื่อให้มีคู่แบบนั้น ขอเป็นโสดดีกว่า", choice: "จ" }
         ]
       },
       {
@@ -587,9 +587,9 @@
         options: [
           { text: "ไม่พร้อมเสี่ยงกับความเจ็บปวด<br>การถูกหักหลังหรือความผิดหวังซ้ำรอยอีกต่อไป", choice: "ก" },
           { text: "เซฟโซนที่ได้อยู่กับตัวเองโดยไม่ต้องเหนื่อย<br>หรือเอาพลังงานไปวุ่นวายกับใคร", choice: "ข" },
-          { text: "โอกาสที่จะได้ทำตามใจ ออกเดินทาง<br>หรือค้นหาสิ่งใหม่ๆ โดยไม่มีใครมาเป็นบ่วงผูกมัด", choice: "ค" },
-          { text: "แผนชีวิตที่วางไว้อย่างดี ซึ่งรู้สึกว่าไม่คุ้มที่จะลดสเปกลงมาเพื่อคนที่ยังไม่ใช่ที่สุด", choice: "ง" },
-          { text: "จุดยืนและตัวตนที่ชัดเจน ซึ่งไม่อยากจะฝืนเปลี่ยนหรือยอมจำนนเพื่อเอาใจใคร", choice: "จ" }
+          { text: "โอกาสที่จะได้ทำตามใจ ออกเดินทาง<br>หรือค้นหาสิ่งใหม่ๆ โดยไม่มีใครมาผูกมัด", choice: "ค" },
+          { text: "แผนชีวิตที่วางไว้อย่างดี ซึ่งรู้สึกว่าไม่คุ้มที่จะลดสเปก<br>ลงมาเพื่อคนที่ยังไม่ใช่ที่สุด", choice: "ง" },
+          { text: "จุดยืนและตัวตนที่ชัดเจน ซึ่งไม่อยากจะฝืนเปลี่ยน<br>หรือยอมจำนนเพื่อเอาใจใคร", choice: "จ" }
         ]
       }
     ];
@@ -612,13 +612,15 @@
     const btnPrev = document.getElementById("btn-prev");
     const btnNext = document.getElementById("btn-next");
     const btnNextText = document.getElementById("btn-next-text");
-    // ✅ Ultra-Responsive FastTap Pointer Delegation (แก้ปัญหา Browser ตัด Click ทิ้งบนจอมือถือ 100%)
+    // ✅ Ultra-Responsive FastTap Pointer Delegation (ผูก targetBtn ล่วงหน้า 100% เสถียรบนทุกหน้าจอ)
+    let targetBtn = null;
     let pointerStartX = 0;
     let pointerStartY = 0;
     let pointerStartTime = 0;
     let lastSelectionTime = 0;
 
     optionsContainer.addEventListener("pointerdown", function (e) {
+      targetBtn = e.target.closest(".option-card");
       pointerStartX = e.clientX;
       pointerStartY = e.clientY;
       pointerStartTime = Date.now();
@@ -629,15 +631,17 @@
       const dy = Math.abs(e.clientY - pointerStartY);
       const dt = Date.now() - pointerStartTime;
 
-      // ถ้านิ้วขยับไม่เกิน 12px (ระยะกลิ้งของนิ้วโป้ง) และแตะเร็วกว่า 400ms = ตั้งใจแตะตัวเลือก
-      if (dx < 12 && dy < 12 && dt < 400) {
-        const btn = e.target.closest(".option-card");
-        if (btn && btn.dataset.choice) {
-          lastSelectionTime = Date.now();
-          selectOption(btn.dataset.choice);
-        }
+      // ถ้านิ้วขยับไม่เกิน 20px (เผื่อระยะกลิ้งของนิ้วโป้งบนจอยาว) และแตะเร็วกว่า 500ms = ตั้งใจแตะตัวเลือก
+      if (targetBtn && targetBtn.dataset.choice && dx < 20 && dy < 20 && dt < 500) {
+        lastSelectionTime = Date.now();
+        selectOption(targetBtn.dataset.choice);
       }
+      targetBtn = null;
     });
+
+    optionsContainer.addEventListener("pointercancel", function () {
+      targetBtn = null;
+    }, { passive: true });
 
     // Fallback สำหรับ Mouse click / Desktop / Accessibility (ป้องกันการเลือกซ้ำซ้อน)
     optionsContainer.addEventListener("click", function (e) {
@@ -672,6 +676,10 @@
       quizProgressBar.style.width = `${progressPercent}%`;
       quizProgressText.textContent = `ข้อ ${currentQuestionIndex + 1} / ${quizQuestions.length}`;
 
+      // รีเซ็ตตำแหน่งเลื่อนหน้าจอขึ้นบนสุดเสมอเมื่อเปลี่ยนข้อ
+      const mainEl = document.querySelector("main");
+      if (mainEl) mainEl.scrollTop = 0;
+
       // Reset & Render Option Buttons
       optionsContainer.innerHTML = "";
 
@@ -681,7 +689,7 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.dataset.choice = opt.choice;
-        btn.className = "option-card w-full select-none text-left p-4 rounded-2xl border-2 border-slate-200 bg-white shadow-sm flex items-start gap-3";
+        btn.className = "option-card w-full select-none text-left p-3.5 sm:p-4 rounded-2xl border-2 border-slate-200 bg-white shadow-sm flex items-start gap-2.5 sm:gap-3";
 
         const badge = document.createElement("span");
         badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs shrink-0";
