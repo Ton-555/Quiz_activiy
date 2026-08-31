@@ -195,6 +195,25 @@
       vertical-align: middle;
       text-align: center;
     }
+
+    html,
+    body {
+      height: 100dvh !important;
+      /* ตรึงความสูงให้พอดีกับจอจริงของมือถือ */
+      overflow: hidden !important;
+      /* ปิดการเลื่อนหน้าจอหลัก */
+      overscroll-behavior: none;
+      /* ป้องกันเอฟเฟกต์การดึงหน้าจอ (Pull-to-refresh) */
+    }
+
+    /* 2. อนุญาตให้เลื่อนหน้าจอได้เฉพาะพื้นที่เนื้อหา (แก้ปัญหาปุ่มล้นบนจอเล็ก) */
+    main {
+      height: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2rem;
+      /* เผื่อระยะขอบล่างนิดหน่อย */
+    }
   </style>
 </head>
 
