@@ -86,9 +86,31 @@
       --tw-ring-color: rgba(102, 133, 78, 0.3);
     }
 
-    /* สไตล์การ์ดตัวเลือก */
+    /* สไตล์การ์ดตัวเลือก - กำหนดให้พื้นที่สัมผัสเสถียร 100% ครอบคลุมทั้งกล่อง */
+    .option-card {
+      position: relative;
+      display: flex !important;
+      width: 100% !important;
+      cursor: pointer !important;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      transition: all 0.15s ease;
+    }
+
+    .option-card:hover {
+      border-color: rgba(102, 133, 78, 0.6) !important;
+      background-color: rgba(102, 133, 78, 0.06) !important;
+    }
+
     .option-card:active {
-      transform: scale(0.97);
+      background-color: rgba(102, 133, 78, 0.14) !important;
+    }
+
+    .option-card * {
+      pointer-events: none !important;
+      cursor: pointer !important;
     }
 
     /* จัดการความสูงบรรทัดสำหรับภาษาไทยและการบันทึกรูปภาพ */
@@ -397,11 +419,11 @@
       }
     }
 
-    // --- 1. ข้อมูลคำถามและตัวเลือก (10 ข้อ) ---
+    // --- 1. ข้อมูลคำถามและตัวเลือก (9 ข้อ) ---
     const quizQuestions = [
       {
         id: 1,
-        tag: "ข้อ 1/10",
+        tag: "ข้อ 1/9",
         title: "เวลามีคนชวนออกเดตครั้งแรก คุณ...",
         options: [
           { text: "กังวลล่วงหน้าไปหมดว่าจะพูดอะไรผิดหรือเปล่า", choice: "ก" },
@@ -413,7 +435,7 @@
       },
       {
         id: 2,
-        tag: "ข้อ 2/10",
+        tag: "ข้อ 2/9",
         title: "มาตรฐานการเลือกคนที่จะคบ คุณมักจะ...",
         options: [
           { text: "กลัวเลือกผิดจนไม่กล้าตัดสินใจ", choice: "ก" },
@@ -425,7 +447,7 @@
       },
       {
         id: 3,
-        tag: "ข้อ 3/10",
+        tag: "ข้อ 3/9",
         title: "เมื่อพูดถึง \"เวลาว่าง\" ของคุณตอนนี้...",
         options: [
           { text: "มักถูกความคิดกังวลเรื่องความสัมพันธ์แทรกเข้ามาบ่อยๆ", choice: "ก" },
@@ -437,19 +459,7 @@
       },
       {
         id: 4,
-        tag: "ข้อ 4/10",
-        title: "คนรอบตัวมักบอกว่าคุณเป็นคนแบบไหนในเรื่องความรัก",
-        options: [
-          { text: "อ่อนไหว คิดมาก กังวลง่าย", choice: "ก" },
-          { text: "เข้าถึงยาก ไม่ค่อยเปิดตัวเรื่องหัวใจ", choice: "ข" },
-          { text: "มีไอเดียแปลกใหม่<br>ไม่ชอบกรอบความสัมพันธ์แบบเดิมๆ", choice: "ค" },
-          { text: "จริงจัง มีมาตรฐาน วางแผนทุกอย่าง", choice: "ง" },
-          { text: "ตรงไปตรงมา ไม่ยอมง่ายๆ แม้ในเรื่องหัวใจ", choice: "จ" }
-        ]
-      },
-      {
-        id: 5,
-        tag: "ข้อ 5/10",
+        tag: "ข้อ 4/9",
         title: "สิ่งที่ทำให้คุณลังเลจะเริ่มความสัมพันธ์ใหม่มากที่สุดคือ",
         options: [
           { text: "กลัวผิดหวังหรือถูกทำร้ายจิตใจซ้ำ", choice: "ก" },
@@ -460,8 +470,8 @@
         ]
       },
       {
-        id: 6,
-        tag: "ข้อ 6/10",
+        id: 5,
+        tag: "ข้อ 5/9",
         title: "เวลาคุยกับใครแล้วความเห็นไม่ตรงกัน คุณมักจะ...",
         options: [
           { text: "กังวลว่าอีกฝ่ายจะโกรธหรือหมดใจไปเลย", choice: "ก" },
@@ -472,8 +482,8 @@
         ]
       },
       {
-        id: 7,
-        tag: "ข้อ 7/10",
+        id: 6,
+        tag: "ข้อ 6/9",
         title: "ถ้าให้จินตนาการชีวิตอีก 5 ปีข้างหน้า คุณเห็นตัวเองแบบไหน",
         options: [
           { text: "กังวลไปก่อนว่าจะยังไม่มีใครอยู่ข้างๆ", choice: "ก" },
@@ -484,8 +494,8 @@
         ]
       },
       {
-        id: 8,
-        tag: "ข้อ 8/10",
+        id: 7,
+        tag: "ข้อ 7/9",
         title: "เหตุผลลึกๆ ที่ทำให้ตอนนี้คุณยังโสดคือ...",
         options: [
           { text: "กลัวว่าจะเจ็บปวดถ้าเปิดใจแล้วผิดหวังอีก", choice: "ก" },
@@ -496,8 +506,8 @@
         ]
       },
       {
-        id: 9,
-        tag: "ข้อ 9/10",
+        id: 8,
+        tag: "ข้อ 8/9",
         title: "เวลาเห็นเพื่อนรอบตัวทยอยเปิดตัวแฟน หรือแต่งงานกันไปหมด คุณมักจะรู้สึกหรือทำอย่างไร?",
         options: [
           { text: "แอบกังวลลึกๆ ว่าตัวเองจะถูกทิ้งให้อยู่คนเดียว หรือกลัวว่าจะหาคู่ไม่ได้", choice: "ก" },
@@ -508,8 +518,8 @@
         ]
       },
       {
-        id: 10,
-        tag: "ข้อ 10/10",
+        id: 9,
+        tag: "ข้อ 9/9",
         title: "หากต้องสรุปเพียงข้อเดียว... \"กำแพง\" ที่สูงและแข็งแกร่งที่สุดที่ทำให้คุณเลือกที่จะเป็นโสดจนถึงทุกวันนี้ คืออะไร?",
         options: [
           { text: "ไม่พร้อมเสี่ยงกับความเจ็บปวด<br>การถูกหักหลังหรือความผิดหวังซ้ำรอยอีกต่อไป", choice: "ก" },
@@ -572,21 +582,25 @@
 
       q.options.forEach((opt, index) => {
         const btn = document.createElement("button");
+        btn.type = "button";
         btn.dataset.choice = opt.choice;
-        btn.className = "option-card w-full text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-indigo-50/50 hover:border-indigo-300 transition-all duration-150 shadow-sm flex items-start gap-3 group";
+        btn.className = "option-card w-full cursor-pointer select-none text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-quiz-green-light/50 hover:border-quiz-green/40 transition-all duration-150 shadow-sm flex items-start gap-3 group";
 
         const badge = document.createElement("span");
-        badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 transition-colors";
+        badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-quiz-green group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 pointer-events-none transition-colors";
         badge.textContent = thaiBadges[index] || opt.choice;
 
         const text = document.createElement("span");
-        text.className = "option-text text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal transition-colors block";
+        text.className = "option-text flex-1 text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal pointer-events-none transition-colors block";
         text.innerHTML = opt.text.replace(/\n/g, "<br>");
 
         btn.appendChild(badge);
         btn.appendChild(text);
 
-        btn.onclick = () => selectOption(opt.choice);
+        btn.onclick = (e) => {
+          if (e) e.preventDefault();
+          selectOption(opt.choice);
+        };
         optionsContainer.appendChild(btn);
       });
 
@@ -611,13 +625,13 @@
         const text = btn.querySelector(".option-text");
 
         if (isSelected) {
-          btn.className = "option-card w-full text-left p-4 rounded-2xl border-2 border-quiz-green bg-quiz-green-light ring-2 ring-quiz-green transition-all duration-150 shadow-sm flex items-start gap-3 group";
-          if (badge) badge.className = "option-badge w-7 h-6 rounded-lg bg-quiz-green text-white flex items-center justify-center font-bold text-xs shrink-0 transition-colors";
-          if (text) text.className = "option-text text-xs sm:text-sm text-slate-900 leading-snug font-semibold transition-colors";
+          btn.className = "option-card w-full cursor-pointer select-none text-left p-4 rounded-2xl border-2 border-quiz-green bg-quiz-green-light ring-2 ring-quiz-green transition-all duration-150 shadow-sm flex items-start gap-3 group";
+          if (badge) badge.className = "option-badge w-7 h-6 rounded-lg bg-quiz-green text-white flex items-center justify-center font-bold text-xs shrink-0 pointer-events-none transition-colors";
+          if (text) text.className = "option-text flex-1 text-xs sm:text-sm text-slate-900 leading-snug font-semibold pointer-events-none transition-colors block";
         } else {
-          btn.className = "option-card w-full text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-quiz-green-light/50 hover:border-quiz-green/40 transition-all duration-150 shadow-sm flex items-start gap-3 group";
-          if (badge) badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-quiz-green group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 transition-colors";
-          if (text) text.className = "option-text text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal transition-colors";
+          btn.className = "option-card w-full cursor-pointer select-none text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-quiz-green-light/50 hover:border-quiz-green/40 transition-all duration-150 shadow-sm flex items-start gap-3 group";
+          if (badge) badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-quiz-green group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 pointer-events-none transition-colors";
+          if (text) text.className = "option-text flex-1 text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal pointer-events-none transition-colors block";
         }
       });
 
@@ -648,7 +662,7 @@
       },
       ข: {
         title: "Cozy Capy",
-        subtitle: "ไม่สะอื่น สดชื่นด้วยซ้ำ",
+        subtitle: "ไม่สะอื้น สดชื่นด้วยซ้ำ",
         description: "พึงพอใจมากจ้ากับการอยู่คนเดียว ไม่ต้องมีใครมาเติมเต็มก็มีความสุขได้ด้วยตัวเอง ชาร์จพลังงานได้ด้วยตัวเองเนอะ ไม่ใช่จากการมีคู่",
         image: "image/result_page-0002.jpg",
         accentBg: "bg-amber-400"
@@ -700,8 +714,8 @@
       screenResult.classList.remove("hidden");
       screenResult.classList.add("flex", "fade-enter");
 
-      // Weighted Scoring: กำหนดน้ำหนักคะแนนตามข้อ (ข้อท้ายๆ จะมีน้ำหนักสูงขึ้นเพื่อลดโอกาสคะแนนเท่ากัน)
-      const questionWeights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.05, 1.10, 1.15, 1.20, 1.25];
+      // Weighted Scoring: กำหนดน้ำหนักคะแนนตามข้อ (9 ข้อ)
+      const questionWeights = [1.0, 1.0, 1.0, 1.0, 1.05, 1.10, 1.15, 1.20, 1.25];
 
       // Count scores for ก, ข, ค, ง, จ
       const counts = { ก: 0, ข: 0, ค: 0, ง: 0, จ: 0 };
