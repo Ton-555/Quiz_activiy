@@ -44,11 +44,11 @@
       background-color: #ffffff;
     }
 
-    /* Animation เฟดเข้าทั่วไป (หน้าคำถาม) 0.45s */
+    /* Animation เฟดเข้าทั่วไป (หน้าคำถาม) 0.25s — ลดลงเพื่อให้ปุ่ม interactive เร็วขึ้นบนมือถือ */
     .fade-enter {
       opacity: 0;
       transform: translateY(10px) scale(0.98);
-      animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     /* Animation เฟดเข้าเฉพาะการ์ดต้อนรับ 1s */
@@ -91,12 +91,16 @@
       position: relative;
       display: flex !important;
       width: 100% !important;
+      min-height: 48px; /* WCAG minimum touch target */
       cursor: pointer !important;
       user-select: none;
       -webkit-user-select: none;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
+      -ms-touch-action: manipulation;
       transition: all 0.15s ease;
+      isolation: isolate; /* สร้าง stacking context ใหม่ป้องกัน event ถูกกิน */
+      z-index: 1;
     }
 
     .option-card:hover {
@@ -111,6 +115,25 @@
     .option-card * {
       pointer-events: none !important;
       cursor: pointer !important;
+    }
+
+    /* ป้องกัน option ซ้อนทับกันบนจอเล็ก */
+    #options-container {
+      position: relative;
+      z-index: 2;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ลดขนาดตัวอักษรตัวเลือกบนจอเล็กมาก เพื่อไม่ให้ปุ่มสูงเกินจนซ้อนกัน */
+    @media (max-width: 380px) {
+      .option-text {
+        font-size: 11px !important;
+        line-height: 1.4 !important;
+      }
+      .option-card {
+        padding: 10px 12px !important;
+      }
     }
 
     /* จัดการความสูงบรรทัดสำหรับภาษาไทยและการบันทึกรูปภาพ */
@@ -597,10 +620,31 @@
         btn.appendChild(badge);
         btn.appendChild(text);
 
-        btn.onclick = (e) => {
-          if (e) e.preventDefault();
+        // --- ระบบ Touch + Click ที่เสถียร 100% บนมือถือ ---
+        // touchend จะทำงานทันทีไม่ต้องรอ 300ms click delay
+        let _touchHandled = false;
+
+        btn.addEventListener("touchend", function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          _touchHandled = true;
           selectOption(opt.choice);
-        };
+          // Reset flag หลัง 400ms เผื่อ click event มาช้า
+          setTimeout(() => { _touchHandled = false; }, 400);
+        }, { passive: false });
+
+        btn.addEventListener("click", function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          // ถ้า touch จัดการไปแล้ว ข้ามไป ป้องกัน double-fire
+          if (_touchHandled) {
+            _touchHandled = false;
+            return;
+          }
+          selectOption(opt.choice);
+        });
+
         optionsContainer.appendChild(btn);
       });
 
