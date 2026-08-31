@@ -44,21 +44,24 @@
       background-color: #ffffff;
     }
 
-    /* Animation เฟดเข้าทั่วไป (หน้าคำถาม) 0.25s — ลดลงเพื่อให้ปุ่ม interactive เร็วขึ้นบนมือถือ */
+    /* หน้าคำถาม: animate เฉพาะ opacity ไม่ใช้ transform เพื่อไม่ให้ hit-test เพี้ยน */
     .fade-enter {
-      opacity: 0;
-      transform: translateY(10px) scale(0.98);
-      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: fadeInQuestion 0.18s ease-out forwards;
     }
 
-    /* Animation เฟดเข้าเฉพาะการ์ดต้อนรับ 1s */
+    /* การ์ดต้อนรับ: ใช้ transform + opacity ได้เพราะไม่มีปุ่มตัวเลือก */
     .intro-fade-enter {
       opacity: 0;
       transform: translateY(10px) scale(0.98);
-      animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: fadeInIntro 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes fadeIn {
+    @keyframes fadeInQuestion {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes fadeInIntro {
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -89,33 +92,38 @@
     /* สไตล์การ์ดตัวเลือก */
     .option-card {
       position: relative;
-      display: flex !important;
-      width: 100% !important;
       min-height: 48px;
-      cursor: pointer !important;
+      cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
-      -ms-touch-action: manipulation;
-      /* ⚠️ ใช้ transition เฉพาะ property ไม่ใช้ transition-all เพื่อลด layout jank */
-      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: background-color 0.12s ease, border-color 0.12s ease;
     }
 
+    /* :active เข้มชัด 0.20 ให้เห็นชัดว่ากดติด */
     .option-card:active {
-      background-color: rgba(102, 133, 78, 0.14) !important;
+      background-color: rgba(102, 133, 78, 0.20) !important;
     }
 
-    /* child elements ทั้งหมดต้องไม่ดัก touch event */
+    /* hover เฉพาะ device ที่มี hover จริง (mouse/trackpad) — ไม่ให้ hover ค้างบนมือถือ */
+    @media (hover: hover) {
+      .option-card:hover {
+        border-color: rgba(102, 133, 78, 0.5);
+        background-color: rgba(102, 133, 78, 0.06);
+      }
+    }
+
+    /* child elements ทั้งหมด pointer-events: none */
     .option-card * {
       pointer-events: none !important;
     }
 
-    /* สถานะ selected — ใช้ class toggle แทนการ replace className ทั้งหมด */
+    /* selected — เปลี่ยนแค่ border-color ไม่เปลี่ยน border-width */
     .option-card.selected {
-      border: 2px solid #66854E !important;
+      border-color: #66854E !important;
       background-color: rgba(102, 133, 78, 0.12) !important;
-      box-shadow: 0 0 0 2px rgba(102, 133, 78, 0.3) !important;
+      box-shadow: 0 0 0 2px rgba(102, 133, 78, 0.3);
     }
 
     .option-card.selected .option-badge {
@@ -128,7 +136,6 @@
       font-weight: 600 !important;
     }
 
-    /* ⚠️ ห้ามใส่ overflow-y:auto — จะทำให้ browser ตีความ tap เป็น scroll gesture */
     #options-container {
       position: relative;
     }
@@ -409,7 +416,7 @@
 
   <!-- Footer -->
   <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
-    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.3
+    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.4
   </footer>
 
   <script>
@@ -582,6 +589,12 @@
     const btnPrev = document.getElementById("btn-prev");
     const btnNext = document.getElementById("btn-next");
     const btnNextText = document.getElementById("btn-next-text");
+    // ✅ Event Delegation: listener เดียวผูกครั้งเดียว — ไม่สร้าง/ทำลาย listener ทุกข้อ
+    optionsContainer.addEventListener("click", function (e) {
+      const btn = e.target.closest(".option-card");
+      if (!btn || !btn.dataset.choice) return;
+      selectOption(btn.dataset.choice);
+    });
 
     // --- Functions ---
     function startQuiz() {
@@ -617,8 +630,7 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.dataset.choice = opt.choice;
-        // ใช้ class base คงที่ — state จัดการผ่าน .selected class ใน CSS
-        btn.className = "option-card w-full select-none text-left p-4 rounded-2xl border border-slate-200/90 bg-white shadow-sm flex items-start gap-3";
+        btn.className = "option-card w-full select-none text-left p-4 rounded-2xl border-2 border-slate-200 bg-white shadow-sm flex items-start gap-3";
 
         const badge = document.createElement("span");
         badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs shrink-0";
@@ -630,14 +642,7 @@
 
         btn.appendChild(badge);
         btn.appendChild(text);
-
-        // ✅ ใช้ click event อย่างเดียว — ไม่ซับซ้อน ไม่มี race condition
-        // touch-action: manipulation + viewport meta tag ลด 300ms delay อยู่แล้ว
-        btn.addEventListener("click", function (e) {
-          e.preventDefault();
-          selectOption(opt.choice);
-        });
-
+        // ไม่ผูก listener ที่ปุ่ม — ใช้ delegation จาก container แทน
         optionsContainer.appendChild(btn);
       });
 
