@@ -117,10 +117,12 @@
       background-color: rgba(102, 133, 78, 0.12) !important;
       box-shadow: 0 0 0 2px rgba(102, 133, 78, 0.3) !important;
     }
+
     .option-card.selected .option-badge {
       background-color: #66854E !important;
       color: white !important;
     }
+
     .option-card.selected .option-text {
       color: #0f172a !important;
       font-weight: 600 !important;
@@ -137,6 +139,7 @@
         font-size: 11px !important;
         line-height: 1.4 !important;
       }
+
       .option-card {
         padding: 10px 12px !important;
       }
@@ -406,7 +409,7 @@
 
   <!-- Footer -->
   <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
-    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา
+    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.3
   </footer>
 
   <script>
@@ -630,7 +633,7 @@
 
         // ✅ ใช้ click event อย่างเดียว — ไม่ซับซ้อน ไม่มี race condition
         // touch-action: manipulation + viewport meta tag ลด 300ms delay อยู่แล้ว
-        btn.addEventListener("click", function(e) {
+        btn.addEventListener("click", function (e) {
           e.preventDefault();
           selectOption(opt.choice);
         });
