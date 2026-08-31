@@ -114,11 +114,6 @@
       }
     }
 
-    /* child elements ทั้งหมด pointer-events: none */
-    .option-card * {
-      pointer-events: none !important;
-    }
-
     /* selected — เปลี่ยนแค่ border-color ไม่เปลี่ยน border-width */
     .option-card.selected {
       border-color: #66854E !important;
@@ -209,7 +204,7 @@
   </header>
 
   <!-- Main Content Container -->
-  <main class="relative z-10 w-full max-w-md mx-auto px-4 flex-1 flex flex-col justify-center py-2">
+  <main class="relative z-10 w-full max-w-md mx-auto px-4 flex-1 flex flex-col justify-start py-10">
 
     <!-- SCREEN 1: Welcome / Intro Sequence Screen -->
     <div id="screen-welcome"
