@@ -117,12 +117,14 @@
       cursor: pointer !important;
     }
 
-    /* ป้องกัน option ซ้อนทับกันบนจอเล็ก */
+    /* ป้องกัน option ซ้อนทับกันบนจอเล็ก + บังคับ GPU layer ใหม่ */
     #options-container {
       position: relative;
       z-index: 2;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      will-change: transform; /* บังคับ GPU layer แยก ป้องกัน touch ถูกกินโดย blur layer */
+      transform: translateZ(0); /* Force GPU compositing */
     }
 
     /* ลดขนาดตัวอักษรตัวเลือกบนจอเล็กมาก เพื่อไม่ให้ปุ่มสูงเกินจนซ้อนกัน */
@@ -226,8 +228,9 @@
       </div>
 
       <!-- Question Card -->
+      <!-- ใช้ bg-white ทึบแทน backdrop-blur เพื่อป้องกัน touch event ถูกกินโดย blur compositing layer บน Safari/In-App browser -->
       <div id="question-card"
-        class="fade-enter bg-white/90 backdrop-blur-xl border border-white/80 rounded-3xl p-6 sm:p-7 shadow-xl shadow-slate-200/50">
+        class="fade-enter bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-7 shadow-xl shadow-slate-200/50">
         <div class="inline-block px-3 py-1 bg-quiz-green-light text-quiz-green font-semibold text-xs rounded-lg mb-3"
           id="question-tag">
           สถานการณ์ที่ 1
@@ -621,23 +624,32 @@
         btn.appendChild(text);
 
         // --- ระบบ Touch + Click ที่เสถียร 100% บนมือถือ ---
-        // touchend จะทำงานทันทีไม่ต้องรอ 300ms click delay
         let _touchHandled = false;
+        let _touchStarted = false;
 
+        // touchstart: จอง touch event ทันที ป้องกัน browser ดึงไปทำ scroll
+        btn.addEventListener("touchstart", function(e) {
+          _touchStarted = true;
+        }, { passive: true });
+
+        // touchend: ทำงานทันทีไม่ต้องรอ 300ms click delay
         btn.addEventListener("touchend", function(e) {
+          if (!_touchStarted) return;
+          _touchStarted = false;
           e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation();
           _touchHandled = true;
           selectOption(opt.choice);
-          // Reset flag หลัง 400ms เผื่อ click event มาช้า
           setTimeout(() => { _touchHandled = false; }, 400);
         }, { passive: false });
 
+        // touchcancel: ล้าง flag ถ้า touch ถูกยกเลิก (เช่น scroll)
+        btn.addEventListener("touchcancel", function() {
+          _touchStarted = false;
+        }, { passive: true });
+
+        // click: fallback สำหรับ desktop หรือ accessibility tools
         btn.addEventListener("click", function(e) {
           e.preventDefault();
-          e.stopPropagation();
-          // ถ้า touch จัดการไปแล้ว ข้ามไป ป้องกัน double-fire
           if (_touchHandled) {
             _touchHandled = false;
             return;
