@@ -44,8 +44,9 @@
       background-color: #ffffff;
     }
 
+    /* ทุกส่วนประกอบในปุ่มส่ง Event ไปที่ button เสมอ (คลิกโดนข้อความ/ไอคอน/พื้นที่ว่าง ก็ติด 100%) */
     .option-card * {
-      touch-action: manipulation;
+      pointer-events: none;
     }
 
     /* หน้าคำถาม: animate เฉพาะ opacity ไม่ใช้ transform เพื่อไม่ให้ hit-test เพี้ยน */
@@ -196,23 +197,13 @@
       text-align: center;
     }
 
-    html,
-    body {
-      height: 100dvh !important;
-      /* ตรึงความสูงให้พอดีกับจอจริงของมือถือ */
-      overflow: hidden !important;
-      /* ปิดการเลื่อนหน้าจอหลัก */
-      overscroll-behavior: none;
-      /* ป้องกันเอฟเฟกต์การดึงหน้าจอ (Pull-to-refresh) */
+    html {
+      scroll-behavior: smooth;
     }
 
-    /* 2. อนุญาตให้เลื่อนหน้าจอได้เฉพาะพื้นที่เนื้อหา (แก้ปัญหาปุ่มล้นบนจอเล็ก) */
-    main {
-      height: 100%;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 2rem;
-      /* เผื่อระยะขอบล่างนิดหน่อย */
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
     }
   </style>
 </head>
@@ -439,7 +430,7 @@
 
   <!-- Footer -->
   <footer class="relative z-10 w-full text-center py-4 text-xs text-slate-400">
-    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.7
+    © รู้ไหมใครโสด แบบสอบถามสำหรับกิจกรรมสัมนา v1.8
   </footer>
 
   <script>
@@ -612,40 +603,9 @@
     const btnPrev = document.getElementById("btn-prev");
     const btnNext = document.getElementById("btn-next");
     const btnNextText = document.getElementById("btn-next-text");
-    // ✅ Ultra-Responsive FastTap Pointer Delegation (ผูก targetBtn ล่วงหน้า 100% เสถียรบนทุกหน้าจอ)
-    let targetBtn = null;
-    let pointerStartX = 0;
-    let pointerStartY = 0;
-    let pointerStartTime = 0;
-    let lastSelectionTime = 0;
 
-    optionsContainer.addEventListener("pointerdown", function (e) {
-      targetBtn = e.target.closest(".option-card");
-      pointerStartX = e.clientX;
-      pointerStartY = e.clientY;
-      pointerStartTime = Date.now();
-    }, { passive: true });
-
-    optionsContainer.addEventListener("pointerup", function (e) {
-      const dx = Math.abs(e.clientX - pointerStartX);
-      const dy = Math.abs(e.clientY - pointerStartY);
-      const dt = Date.now() - pointerStartTime;
-
-      // ถ้านิ้วขยับไม่เกิน 20px (เผื่อระยะกลิ้งของนิ้วโป้งบนจอยาว) และแตะเร็วกว่า 500ms = ตั้งใจแตะตัวเลือก
-      if (targetBtn && targetBtn.dataset.choice && dx < 20 && dy < 20 && dt < 500) {
-        lastSelectionTime = Date.now();
-        selectOption(targetBtn.dataset.choice);
-      }
-      targetBtn = null;
-    });
-
-    optionsContainer.addEventListener("pointercancel", function () {
-      targetBtn = null;
-    }, { passive: true });
-
-    // Fallback สำหรับ Mouse click / Desktop / Accessibility (ป้องกันการเลือกซ้ำซ้อน)
+    // ✅ Click Event Delegation: แม่นยำ 100% ทั้งบนคอม (เมาส์) และมือถือ (จอสัมผัส)
     optionsContainer.addEventListener("click", function (e) {
-      if (Date.now() - lastSelectionTime < 400) return;
       const btn = e.target.closest(".option-card");
       if (!btn || !btn.dataset.choice) return;
       selectOption(btn.dataset.choice);
