@@ -44,6 +44,10 @@
       background-color: #ffffff;
     }
 
+    .option-card * {
+      touch-action: manipulation;
+    }
+
     /* หน้าคำถาม: animate เฉพาะ opacity ไม่ใช้ transform เพื่อไม่ให้ hit-test เพี้ยน */
     .fade-enter {
       animation: fadeInQuestion 0.18s ease-out forwards;
@@ -57,8 +61,13 @@
     }
 
     @keyframes fadeInQuestion {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     @keyframes fadeInIntro {
