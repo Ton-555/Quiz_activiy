@@ -86,48 +86,52 @@
       --tw-ring-color: rgba(102, 133, 78, 0.3);
     }
 
-    /* สไตล์การ์ดตัวเลือก - กำหนดให้พื้นที่สัมผัสเสถียร 100% ครอบคลุมทั้งกล่อง */
+    /* สไตล์การ์ดตัวเลือก */
     .option-card {
       position: relative;
       display: flex !important;
       width: 100% !important;
-      min-height: 48px; /* WCAG minimum touch target */
+      min-height: 48px;
       cursor: pointer !important;
       user-select: none;
       -webkit-user-select: none;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       -ms-touch-action: manipulation;
-      transition: all 0.15s ease;
-      isolation: isolate; /* สร้าง stacking context ใหม่ป้องกัน event ถูกกิน */
-      z-index: 1;
-    }
-
-    .option-card:hover {
-      border-color: rgba(102, 133, 78, 0.6) !important;
-      background-color: rgba(102, 133, 78, 0.06) !important;
+      /* ⚠️ ใช้ transition เฉพาะ property ไม่ใช้ transition-all เพื่อลด layout jank */
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
     .option-card:active {
       background-color: rgba(102, 133, 78, 0.14) !important;
     }
 
+    /* child elements ทั้งหมดต้องไม่ดัก touch event */
     .option-card * {
       pointer-events: none !important;
-      cursor: pointer !important;
     }
 
-    /* ป้องกัน option ซ้อนทับกันบนจอเล็ก + บังคับ GPU layer ใหม่ */
+    /* สถานะ selected — ใช้ class toggle แทนการ replace className ทั้งหมด */
+    .option-card.selected {
+      border: 2px solid #66854E !important;
+      background-color: rgba(102, 133, 78, 0.12) !important;
+      box-shadow: 0 0 0 2px rgba(102, 133, 78, 0.3) !important;
+    }
+    .option-card.selected .option-badge {
+      background-color: #66854E !important;
+      color: white !important;
+    }
+    .option-card.selected .option-text {
+      color: #0f172a !important;
+      font-weight: 600 !important;
+    }
+
+    /* ⚠️ ห้ามใส่ overflow-y:auto — จะทำให้ browser ตีความ tap เป็น scroll gesture */
     #options-container {
       position: relative;
-      z-index: 2;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      will-change: transform; /* บังคับ GPU layer แยก ป้องกัน touch ถูกกินโดย blur layer */
-      transform: translateZ(0); /* Force GPU compositing */
     }
 
-    /* ลดขนาดตัวอักษรตัวเลือกบนจอเล็กมาก เพื่อไม่ให้ปุ่มสูงเกินจนซ้อนกัน */
+    /* ลดขนาดตัวอักษรตัวเลือกบนจอเล็กมาก */
     @media (max-width: 380px) {
       .option-text {
         font-size: 11px !important;
@@ -610,50 +614,24 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.dataset.choice = opt.choice;
-        btn.className = "option-card w-full cursor-pointer select-none text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-quiz-green-light/50 hover:border-quiz-green/40 transition-all duration-150 shadow-sm flex items-start gap-3 group";
+        // ใช้ class base คงที่ — state จัดการผ่าน .selected class ใน CSS
+        btn.className = "option-card w-full select-none text-left p-4 rounded-2xl border border-slate-200/90 bg-white shadow-sm flex items-start gap-3";
 
         const badge = document.createElement("span");
-        badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-quiz-green group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 pointer-events-none transition-colors";
+        badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs shrink-0";
         badge.textContent = thaiBadges[index] || opt.choice;
 
         const text = document.createElement("span");
-        text.className = "option-text flex-1 text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal pointer-events-none transition-colors block";
+        text.className = "option-text flex-1 text-xs sm:text-sm text-slate-700 leading-snug font-normal block";
         text.innerHTML = opt.text.replace(/\n/g, "<br>");
 
         btn.appendChild(badge);
         btn.appendChild(text);
 
-        // --- ระบบ Touch + Click ที่เสถียร 100% บนมือถือ ---
-        let _touchHandled = false;
-        let _touchStarted = false;
-
-        // touchstart: จอง touch event ทันที ป้องกัน browser ดึงไปทำ scroll
-        btn.addEventListener("touchstart", function(e) {
-          _touchStarted = true;
-        }, { passive: true });
-
-        // touchend: ทำงานทันทีไม่ต้องรอ 300ms click delay
-        btn.addEventListener("touchend", function(e) {
-          if (!_touchStarted) return;
-          _touchStarted = false;
-          e.preventDefault();
-          _touchHandled = true;
-          selectOption(opt.choice);
-          setTimeout(() => { _touchHandled = false; }, 400);
-        }, { passive: false });
-
-        // touchcancel: ล้าง flag ถ้า touch ถูกยกเลิก (เช่น scroll)
-        btn.addEventListener("touchcancel", function() {
-          _touchStarted = false;
-        }, { passive: true });
-
-        // click: fallback สำหรับ desktop หรือ accessibility tools
+        // ✅ ใช้ click event อย่างเดียว — ไม่ซับซ้อน ไม่มี race condition
+        // touch-action: manipulation + viewport meta tag ลด 300ms delay อยู่แล้ว
         btn.addEventListener("click", function(e) {
           e.preventDefault();
-          if (_touchHandled) {
-            _touchHandled = false;
-            return;
-          }
           selectOption(opt.choice);
         });
 
@@ -670,25 +648,14 @@
       }
     }
 
+    // ✅ ใช้ classList.toggle แทน className replacement — ลด DOM mutations จาก 15 เหลือ 5
     function updateOptionHighlight() {
       const selectedChoice = userAnswers[currentQuestionIndex];
       const buttons = optionsContainer.querySelectorAll(".option-card");
 
       buttons.forEach((btn) => {
-        const choice = btn.dataset.choice;
-        const isSelected = (choice === selectedChoice);
-        const badge = btn.querySelector(".option-badge");
-        const text = btn.querySelector(".option-text");
-
-        if (isSelected) {
-          btn.className = "option-card w-full cursor-pointer select-none text-left p-4 rounded-2xl border-2 border-quiz-green bg-quiz-green-light ring-2 ring-quiz-green transition-all duration-150 shadow-sm flex items-start gap-3 group";
-          if (badge) badge.className = "option-badge w-7 h-6 rounded-lg bg-quiz-green text-white flex items-center justify-center font-bold text-xs shrink-0 pointer-events-none transition-colors";
-          if (text) text.className = "option-text flex-1 text-xs sm:text-sm text-slate-900 leading-snug font-semibold pointer-events-none transition-colors block";
-        } else {
-          btn.className = "option-card w-full cursor-pointer select-none text-left p-4 rounded-2xl border border-slate-200/90 bg-white hover:bg-quiz-green-light/50 hover:border-quiz-green/40 transition-all duration-150 shadow-sm flex items-start gap-3 group";
-          if (badge) badge.className = "option-badge w-7 h-6 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-quiz-green group-hover:text-white flex items-center justify-center font-bold text-xs shrink-0 pointer-events-none transition-colors";
-          if (text) text.className = "option-text flex-1 text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 leading-snug font-normal pointer-events-none transition-colors block";
-        }
+        const isSelected = (btn.dataset.choice === selectedChoice);
+        btn.classList.toggle("selected", isSelected);
       });
 
       // Update Navigation Buttons State
